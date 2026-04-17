@@ -2,496 +2,150 @@
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#0e0e0e">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#1a1a18">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black">
-<meta name="apple-mobile-web-app-title" content="Chef Fab">
-<title>Chef Fab</title>
-<link rel="manifest" href="manifest.json">
-<link rel="icon" href="icon5.png">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>Ma Cuisine</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
   :root {
-    --gold: #c9a84c;
-    --gold-light: #e8c97a;
-    --gold-dim: #7a6230;
-    --gold-bg: rgba(201,168,76,0.08);
-    --gold-border: rgba(201,168,76,0.25);
-    --bg: #0e0e0e;
-    --bg2: #161616;
-    --bg3: #1e1e1e;
-    --text: #f0e8d0;
-    --text-muted: #8a7f6a;
+    --bg: #0f0f0d;
+    --surface: #1a1a16;
+    --surface2: #222220;
     --border: rgba(255,255,255,0.07);
-    --radius: 18px;
-    --safe-bottom: env(safe-area-inset-bottom, 0px);
+    --border-hover: rgba(255,255,255,0.14);
+    --text: #f0ece3;
+    --muted: rgba(240,236,227,0.45);
+    --accent: #c8a96e;
   }
-
-  html, body {
-    height: 100%;
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-    background: var(--bg);
-    color: var(--text);
-    overflow: hidden;
-  }
-
-  #app {
-    display: flex;
-    flex-direction: column;
-    height: 100dvh;
-    max-width: 480px;
-    margin: 0 auto;
-  }
-
-  #header {
-    background: var(--bg2);
-    border-bottom: 1px solid var(--gold-border);
-    padding: 14px 16px 12px;
-    padding-top: max(14px, env(safe-area-inset-top, 14px));
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    flex-shrink: 0;
-  }
-  #header-avatar {
-    width: 40px; height: 40px;
-    background: var(--gold-bg);
-    border: 1px solid var(--gold-border);
-    border-radius: 50%;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 20px;
-  }
-  #header-info { flex: 1; }
-  #header-info h1 {
-    font-size: 17px; font-weight: 600;
-    color: var(--gold-light);
-    letter-spacing: 0.03em; line-height: 1.2;
-  }
-  #header-info p { font-size: 11px; color: var(--text-muted); letter-spacing: 0.02em; }
-
-  .header-btn {
-    background: var(--gold-bg);
-    border: 1px solid var(--gold-border);
-    border-radius: 8px;
-    padding: 6px 11px;
-    color: var(--gold);
-    font-size: 12px;
-    cursor: pointer;
-    letter-spacing: 0.04em;
-    transition: background 0.15s;
-    font-weight: 500;
-  }
-  .header-btn:active { background: rgba(201,168,76,0.2); }
-
-  .gold-line {
-    height: 1px;
-    background: linear-gradient(90deg, transparent, var(--gold-dim), transparent);
-    flex-shrink: 0;
-  }
-
-  #suggestions-wrap {
-    flex-shrink: 0;
-    padding: 10px 12px 8px;
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: none;
-    background: var(--bg2);
-  }
-  #suggestions-wrap::-webkit-scrollbar { display: none; }
-  #suggestions-inner { display: flex; gap: 8px; width: max-content; }
-  .chip {
-    background: transparent;
-    border: 1px solid var(--gold-border);
-    border-radius: 20px;
-    padding: 5px 14px;
-    font-size: 12.5px;
-    color: var(--gold);
-    cursor: pointer;
-    white-space: nowrap;
-    -webkit-tap-highlight-color: transparent;
-    transition: background 0.15s;
-    letter-spacing: 0.02em;
-  }
-  .chip:active, .chip:hover { background: var(--gold-bg); }
-
-  #chat {
-    flex: 1;
-    overflow-y: auto;
-    -webkit-overflow-scrolling: touch;
-    padding: 14px 12px 8px;
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-    scroll-behavior: smooth;
-    background: var(--bg);
-  }
-  #chat::-webkit-scrollbar { width: 3px; }
-  #chat::-webkit-scrollbar-track { background: transparent; }
-  #chat::-webkit-scrollbar-thumb { background: var(--gold-dim); border-radius: 2px; }
-
-  .msg { display: flex; gap: 8px; align-items: flex-end; max-width: 100%; }
-  .msg.user { flex-direction: row-reverse; }
-
-  .avatar {
-    width: 28px; height: 28px;
-    border-radius: 50%;
-    flex-shrink: 0;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 14px;
-    border: 1px solid var(--gold-border);
-  }
-  .avatar.chef { background: var(--gold-bg); }
-  .avatar.user {
-    background: var(--gold-dim);
-    font-size: 11px; font-weight: 700;
-    color: var(--gold-light);
-    border-color: var(--gold-dim);
-  }
-
-  .bubble {
-    max-width: calc(100% - 44px);
-    padding: 10px 14px;
-    border-radius: var(--radius);
-    font-size: 14.5px;
-    line-height: 1.65;
-    white-space: pre-wrap;
-    word-break: break-word;
-  }
-  .bubble.chef {
-    background: var(--bg3);
-    color: var(--text);
-    border: 1px solid var(--border);
-    border-bottom-left-radius: 4px;
-  }
-  .bubble.user {
-    background: var(--gold-dim);
-    color: var(--gold-light);
-    border-bottom-right-radius: 4px;
-  }
-
-  .typing-bubble {
-    background: var(--bg3);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    border-bottom-left-radius: 4px;
-    padding: 13px 16px;
-    display: flex; gap: 5px; align-items: center;
-  }
-  .dot {
-    width: 6px; height: 6px;
-    border-radius: 50%;
-    background: var(--gold-dim);
-    animation: pulse 1.3s infinite;
-  }
-  .dot:nth-child(2) { animation-delay: 0.22s; }
-  .dot:nth-child(3) { animation-delay: 0.44s; }
-  @keyframes pulse { 0%,80%,100%{opacity:0.2;transform:scale(0.85)} 40%{opacity:1;transform:scale(1)} }
-
-  #input-bar {
-    flex-shrink: 0;
-    background: var(--bg2);
-    border-top: 1px solid var(--gold-border);
-    padding: 10px 12px;
-    padding-bottom: max(10px, var(--safe-bottom));
-    display: flex;
-    gap: 8px;
-    align-items: flex-end;
-  }
-  #user-input {
-    flex: 1;
-    background: var(--bg3);
-    border: 1px solid var(--gold-border);
-    border-radius: 22px;
-    padding: 10px 16px;
-    font-size: 15px;
-    color: var(--text);
-    outline: none;
-    resize: none;
-    max-height: 120px;
-    min-height: 44px;
-    font-family: inherit;
-    line-height: 1.4;
-    -webkit-appearance: none;
-    caret-color: var(--gold);
-  }
-  #user-input:focus { border-color: var(--gold); }
-  #user-input::placeholder { color: var(--text-muted); }
-
-  #btn-send {
-    width: 44px; height: 44px;
-    border-radius: 50%;
-    background: var(--gold-dim);
-    border: 1px solid var(--gold);
-    color: var(--gold-light);
-    cursor: pointer;
-    flex-shrink: 0;
-    display: flex; align-items: center; justify-content: center;
-    -webkit-tap-highlight-color: transparent;
-    transition: opacity 0.15s, background 0.15s;
-  }
-  #btn-send:disabled { opacity: 0.3; }
-  #btn-send:active:not(:disabled) { background: var(--gold); }
-
-  #offline-banner {
-    display: none;
-    background: #3a2800;
-    color: var(--gold-light);
-    font-size: 12px;
-    text-align: center;
-    padding: 6px;
-    flex-shrink: 0;
-    letter-spacing: 0.02em;
-  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; }
+  body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; overflow-x: hidden; }
+  body::before { content: ''; position: fixed; inset: 0; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E"); pointer-events: none; z-index: 0; opacity: 0.6; }
+  .wrap { position: relative; z-index: 1; max-width: 640px; margin: 0 auto; padding: 0 20px 60px; }
+  header { padding: 52px 0 40px; display: flex; align-items: flex-end; justify-content: space-between; border-bottom: 0.5px solid var(--border); margin-bottom: 40px; }
+  .brand-eyebrow { font-size: 11px; letter-spacing: 3px; text-transform: uppercase; color: var(--accent); font-weight: 400; margin-bottom: 8px; }
+  .brand-title { font-family: 'Cormorant Garamond', serif; font-size: 46px; font-weight: 300; line-height: 1; color: var(--text); letter-spacing: -0.5px; }
+  .brand-title em { font-style: italic; color: var(--accent); }
+  .recipe-count { font-family: 'Cormorant Garamond', serif; font-size: 13px; color: var(--muted); text-align: right; line-height: 1.4; }
+  .recipe-count strong { display: block; font-family: 'Cormorant Garamond', serif; font-size: 36px; font-weight: 300; color: var(--text); line-height: 1; }
+  .filters { display: flex; gap: 8px; margin-bottom: 28px; flex-wrap: wrap; }
+  .filter-btn { background: none; border: 0.5px solid var(--border); color: var(--muted); font-family: 'DM Sans', sans-serif; font-size: 12px; font-weight: 400; letter-spacing: 1.5px; text-transform: uppercase; padding: 7px 16px; border-radius: 40px; cursor: pointer; transition: all 0.2s; }
+  .filter-btn:hover { border-color: var(--border-hover); color: var(--text); }
+  .filter-btn.active { background: var(--accent); border-color: var(--accent); color: #0f0f0d; font-weight: 500; }
+  .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  @media (max-width: 420px) { .grid { grid-template-columns: 1fr; } }
+  .card { background: var(--surface); border: 0.5px solid var(--border); border-radius: 16px; padding: 24px 22px 20px; cursor: pointer; text-decoration: none; color: inherit; display: flex; flex-direction: column; gap: 12px; transition: border-color 0.2s, background 0.2s, transform 0.18s; position: relative; overflow: hidden; animation: fadeUp 0.4s ease both; }
+  .card:hover { border-color: var(--border-hover); background: var(--surface2); transform: translateY(-2px); }
+  .card:nth-child(1){animation-delay:0.05s} .card:nth-child(2){animation-delay:0.10s} .card:nth-child(3){animation-delay:0.15s} .card:nth-child(4){animation-delay:0.20s}
+  .card-accent-bar { position: absolute; top: 0; left: 0; right: 0; height: 2px; background: var(--card-color, var(--accent)); opacity: 0.7; }
+  .card-emoji { font-size: 30px; line-height: 1; }
+  .card-body { flex: 1; }
+  .card-category { font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); margin-bottom: 5px; font-weight: 400; }
+  .card-title { font-family: 'Cormorant Garamond', serif; font-size: 22px; font-weight: 400; color: var(--text); line-height: 1.2; margin-bottom: 6px; }
+  .card-desc { font-size: 12px; font-weight: 300; color: var(--muted); line-height: 1.5; }
+  .card-meta { display: flex; align-items: center; justify-content: space-between; margin-top: 4px; }
+  .card-time { font-size: 11px; color: var(--muted); }
+  .card-arrow { width: 26px; height: 26px; border: 0.5px solid var(--border-hover); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: var(--muted); font-size: 13px; transition: all 0.2s; }
+  .card:hover .card-arrow { background: var(--accent); border-color: var(--accent); color: #0f0f0d; }
+  .card-add { border: 0.5px dashed var(--border-hover); background: transparent; align-items: center; justify-content: center; text-align: center; gap: 8px; min-height: 160px; }
+  .card-add:hover { background: var(--surface); }
+  .card-add-plus { width: 36px; height: 36px; border: 0.5px solid var(--border-hover); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 18px; color: var(--muted); margin: 0 auto; }
+  .card-add-label { font-size: 13px; font-weight: 300; color: var(--muted); }
+  .toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(80px); background: var(--surface2); border: 0.5px solid var(--border-hover); border-radius: 40px; padding: 12px 20px; display: flex; align-items: center; gap: 10px; font-size: 13px; color: var(--text); z-index: 999; transition: transform 0.3s ease; white-space: nowrap; }
+  .toast.show { transform: translateX(-50%) translateY(0); }
+  .toast-btn { background: var(--accent); border: none; border-radius: 20px; padding: 5px 12px; font-size: 12px; font-weight: 500; color: #0f0f0d; cursor: pointer; }
+  footer { text-align: center; padding-top: 48px; font-size: 11px; letter-spacing: 1.5px; text-transform: uppercase; color: rgba(240,236,227,0.2); }
+  #version-badge { margin-left: 8px; font-size: 10px; color: rgba(240,236,227,0.15); }
+  @keyframes fadeUp { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:translateY(0)} }
 </style>
 </head>
 <body>
-<div id="app">
-  <div id="header">
-    <div id="header-avatar">🍳</div>
-    <div id="header-info">
-      <h1>Chef Fab</h1>
-      <p id="header-sub">Ton chef cuisinier IA</p>
+<div class="wrap">
+  <header>
+    <div class="brand">
+      <div class="brand-eyebrow">Carnet de recettes</div>
+      <h1 class="brand-title">Ma <em>Cuisine</em></h1>
     </div>
-    <button class="header-btn" id="btn-lang" onclick="toggleLang()">EN</button>
-    <button class="header-btn" id="btn-clear" onclick="clearChat()">✕</button>
+    <div class="recipe-count">
+      <strong id="count">0</strong>
+      recettes<br>sauvegardées
+    </div>
+  </header>
+  <div class="filters">
+    <button class="filter-btn active" data-filter="all">Toutes</button>
+    <button class="filter-btn" data-filter="Dessert">Dessert</button>
+    <button class="filter-btn" data-filter="Plat">Plat</button>
+    <button class="filter-btn" data-filter="Entrée">Entrée</button>
   </div>
+  <div class="grid" id="grid"></div>
+  <footer>Ma Cuisine &mdash; Carnet personnel <span id="version-badge"></span></footer>
+</div>
 
-  <div class="gold-line"></div>
-
-  <div id="offline-banner" id="offline">⚠️ Hors ligne — connexion requise</div>
-
-  <div id="suggestions-wrap">
-    <div id="suggestions-inner"></div>
-  </div>
-
-  <div id="chat"></div>
-
-  <div id="input-bar">
-    <textarea id="user-input" rows="1"
-      oninput="autoResize(this)"
-      onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendMsg()}"
-    ></textarea>
-    <button id="btn-send" onclick="sendMsg()">
-      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-        <line x1="22" y1="2" x2="11" y2="13"></line>
-        <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
-      </svg>
-    </button>
-  </div>
+<div class="toast" id="toast">
+  🍴 Mise à jour disponible
+  <button class="toast-btn" onclick="location.reload()">Actualiser</button>
 </div>
 
 <script>
-const SAVED = `Saved/memorised recipes from Fab:
-- Crêpes (6 crêpes): 125g flour, 2 eggs, 250ml milk, 1 sachet vanilla sugar, 1 pinch salt, 1 tbsp oil or 20g melted butter. Mix dry → eggs → milk gradually → fat. Rest 10–15 min. Hot greased pan, 1 ladle, ~1 min/side. Beer version: replace 125ml milk with blonde beer, cook within 30 min.
-- Romantic dinner for his partner: Beef tenderloin + red wine sauce (Frankovka modrá in Slovakia) + sarladaise potatoes (olive oil, no duck fat, no garlic, no cognac). Constraints: no onions, no nuts/hazelnuts.`;
+  const APP_VERSION = 'v1.0.0';
+  document.getElementById('version-badge').textContent = APP_VERSION;
 
-const SYSTEMS = {
-  fr: `Tu es un chef cuisinier passionné et pédagogue qui parle à son apprenti Fab (basé à Paris). Ton ton est chaleureux, direct, tu tutoies.
+  const RECIPES = [
+    { emoji:"🥞", title:"Crêpes", category:"Dessert", desc:"Pâte légère, version nature ou à la bière blonde", time:"25 min", file:"crepes.html", color:"#c8a96e" },
+    { emoji:"🍅", title:"Ratatouille Provençale", category:"Plat", desc:"Légumes mijotés, herbes de Provence, huile d'olive", time:"55 min", file:"ratatouille.html", color:"#c1440e" }
+  ];
 
-RÈGLES ABSOLUES :
-- Système métrique uniquement (g, ml, °C, cm)
-- Toujours donner les quantités précises
-- Expliquer le POURQUOI de chaque technique
-- Pour chaque recette : 🛒 Ingrédients (avec quantités) → 👨‍🍳 Préparation (étapes numérotées) → 💡 Conseil du chef
-- Cuissons : toujours préciser température (°C) et durée
-- Technique délicate : ⚠️ Attention chef : [conseil clé]
-- Français uniquement. Max 500 mots.
+  let activeFilter = "all";
 
-${SAVED}`,
-  en: `You are a passionate and pedagogical chef talking to your apprentice Fab (based in Paris). Warm, direct tone, first-name basis.
-
-ABSOLUTE RULES:
-- Metric system only (g, ml, °C, cm)
-- Always give precise quantities
-- Explain the WHY of each technique
-- For each recipe: 🛒 Ingredients (with quantities) → 👨‍🍳 Preparation (numbered steps) → 💡 Chef's tip
-- Cooking: always specify temperature (°C) and duration
-- Tricky technique: ⚠️ Watch out: [key tip]
-- English only. Max 500 words.
-
-${SAVED}`
-};
-
-const CHIPS = {
-  fr: [
-    ['🥚 Omelette','Comment faire une omelette parfaite ?'],
-    ['🥞 Crêpes','Recette de crêpes'],
-    ['🥩 Blanquette','Blanquette de veau'],
-    ['🧈 Beurre blanc','Sauce beurre blanc'],
-    ['🍚 Risotto','Risotto crémeux'],
-    ['🍎 Tarte tatin','Tarte tatin'],
-    ['🧅 Soupe oignon',"Soupe à l'oignon gratinée"],
-    ['🍲 Pot-au-feu','Pot-au-feu'],
-    ['🥩 Filet bœuf','Filet de bœuf sauce au vin rouge'],
-  ],
-  en: [
-    ['🥚 Omelette','How to make a perfect omelette?'],
-    ['🥞 Crêpes','Crêpes recipe'],
-    ['🥩 Blanquette','Veal blanquette'],
-    ['🧈 Beurre blanc','Beurre blanc sauce'],
-    ['🍚 Risotto','Creamy risotto'],
-    ['🍎 Tarte tatin','Tarte tatin'],
-    ['🧅 Onion soup','French onion soup gratin'],
-    ['🍲 Pot-au-feu','Pot-au-feu'],
-    ['🥩 Beef fillet','Beef tenderloin with red wine sauce'],
-  ]
-};
-
-const UI = {
-  fr: {
-    sub: 'Ton chef cuisinier IA',
-    placeholder: 'Quelle recette, apprenti ?',
-    welcome: "Bienvenue en cuisine, apprenti ! 👨‍🍳\n\nDemande-moi n'importe quelle recette — je t'explique tout pas à pas avec les quantités exactes.\n\nTes crêpes et le filet de bœuf sont déjà en mémoire. Qu'est-ce qu'on prépare ?",
-    newSession: "Nouvelle session ! Qu'est-ce qu'on prépare aujourd'hui, apprenti ? 👨‍🍳",
-    confirmClear: 'Effacer la conversation ?',
-    error: 'Oups, souci de connexion ! Vérifie ta connexion et réessaie, apprenti.',
-    offline: '⚠️ Hors ligne — connexion requise',
-    langBtn: 'EN',
-  },
-  en: {
-    sub: 'Your AI personal chef',
-    placeholder: 'What recipe today, apprentice?',
-    welcome: "Welcome to the kitchen, apprentice! 👨‍🍳\n\nAsk me any recipe — I'll walk you through it step by step with exact quantities.\n\nYour crêpes and beef tenderloin are already saved. What are we cooking?",
-    newSession: "New session! What are we cooking today, apprentice? 👨‍🍳",
-    confirmClear: 'Clear the conversation?',
-    error: "Oops, connection trouble! Check your connection and try again.",
-    offline: '⚠️ Offline — connection required',
-    langBtn: 'FR',
-  }
-};
-
-let lang = 'fr';
-let history = [];
-
-function setLang(l) {
-  lang = l;
-  const u = UI[l];
-  document.getElementById('header-sub').textContent = u.sub;
-  document.getElementById('user-input').placeholder = u.placeholder;
-  document.getElementById('btn-lang').textContent = u.langBtn;
-  document.getElementById('offline-banner').textContent = u.offline;
-  document.documentElement.lang = l;
-  renderChips();
-}
-
-function toggleLang() { setLang(lang === 'fr' ? 'en' : 'fr'); }
-
-function renderChips() {
-  const inner = document.getElementById('suggestions-inner');
-  inner.innerHTML = '';
-  CHIPS[lang].forEach(([label, q]) => {
-    const d = document.createElement('div');
-    d.className = 'chip';
-    d.textContent = label;
-    d.onclick = () => ask(q);
-    inner.appendChild(d);
-  });
-}
-
-function autoResize(el) {
-  el.style.height = 'auto';
-  el.style.height = Math.min(el.scrollHeight, 120) + 'px';
-}
-
-function scrollBottom() {
-  const c = document.getElementById('chat');
-  c.scrollTop = c.scrollHeight;
-}
-
-function addMsg(who, text) {
-  const chat = document.getElementById('chat');
-  const div = document.createElement('div');
-  div.className = 'msg ' + who;
-  const av = document.createElement('div');
-  av.className = 'avatar ' + who;
-  av.textContent = who === 'chef' ? '🍳' : 'F';
-  const bub = document.createElement('div');
-  bub.className = 'bubble ' + who;
-  bub.textContent = text;
-  div.appendChild(av);
-  div.appendChild(bub);
-  chat.appendChild(div);
-  scrollBottom();
-}
-
-function addTyping() {
-  const chat = document.getElementById('chat');
-  const div = document.createElement('div');
-  div.className = 'msg chef'; div.id = 'typing';
-  const av = document.createElement('div');
-  av.className = 'avatar chef'; av.textContent = '🍳';
-  const bub = document.createElement('div');
-  bub.className = 'typing-bubble';
-  bub.innerHTML = '<div class="dot"></div><div class="dot"></div><div class="dot"></div>';
-  div.appendChild(av); div.appendChild(bub);
-  chat.appendChild(div);
-  scrollBottom();
-}
-
-function removeTyping() {
-  const el = document.getElementById('typing');
-  if (el) el.remove();
-}
-
-async function sendMsg() {
-  const input = document.getElementById('user-input');
-  const msg = input.value.trim();
-  if (!msg) return;
-  input.value = ''; input.style.height = 'auto';
-  addMsg('user', msg);
-  history.push({ role: 'user', content: msg });
-  addTyping();
-  document.getElementById('btn-send').disabled = true;
-
-  try {
-    const res = await fetch('https://chef-fab-proxy.gaborit321.workers.dev', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        model: 'gemini-2.0-flash',
-        max_tokens: 1000,
-        system: SYSTEMS[lang],
-        messages: history
-      })
+  function render() {
+    const grid = document.getElementById('grid');
+    grid.innerHTML = '';
+    const filtered = activeFilter === 'all' ? RECIPES : RECIPES.filter(r => r.category === activeFilter);
+    document.getElementById('count').textContent = RECIPES.length;
+    filtered.forEach(r => {
+      const a = document.createElement('a');
+      a.className = 'card';
+      a.href = r.file;
+      a.style.setProperty('--card-color', r.color);
+      a.innerHTML = `<div class="card-accent-bar"></div><div class="card-emoji">${r.emoji}</div><div class="card-body"><div class="card-category">${r.category}</div><div class="card-title">${r.title}</div><div class="card-desc">${r.desc}</div></div><div class="card-meta"><span class="card-time">⏱ ${r.time}</span><span class="card-arrow">→</span></div>`;
+      grid.appendChild(a);
     });
-    const data = await res.json();
-    const reply = data.content.map(b => b.text || '').join('');
-    removeTyping();
-    addMsg('chef', reply);
-    history.push({ role: 'assistant', content: reply });
-    if (history.length > 30) history = history.slice(-20);
-  } catch(e) {
-    removeTyping();
-    addMsg('chef', UI[lang].error);
+    const add = document.createElement('div');
+    add.className = 'card card-add';
+    add.innerHTML = `<div class="card-add-plus">+</div><div class="card-add-label">Nouvelle recette</div>`;
+    grid.appendChild(add);
   }
 
-  document.getElementById('btn-send').disabled = false;
-  scrollBottom();
-}
+  document.querySelectorAll('.filter-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      activeFilter = btn.dataset.filter;
+      render();
+    });
+  });
 
-function ask(q) {
-  document.getElementById('user-input').value = q;
-  sendMsg();
-}
+  render();
 
-function clearChat() {
-  if (!confirm(UI[lang].confirmClear)) return;
-  document.getElementById('chat').innerHTML = '';
-  history = [];
-  addMsg('chef', UI[lang].newSession);
-}
-
-window.addEventListener('online', () => { document.getElementById('offline-banner').style.display = 'none'; });
-window.addEventListener('offline', () => { document.getElementById('offline-banner').style.display = 'block'; });
-
-if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('sw.js').catch(() => {});
-}
-
-setLang('fr');
-addMsg('chef', UI.fr.welcome);
+  // ── Service Worker ───────────────────────────────────────────
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('./sw.js').then(reg => {
+      reg.addEventListener('updatefound', () => {
+        const newWorker = reg.installing;
+        newWorker.addEventListener('statechange', () => {
+          if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+            document.getElementById('toast').classList.add('show');
+          }
+        });
+      });
+    });
+    let refreshing = false;
+    navigator.serviceWorker.addEventListener('controllerchange', () => {
+      if (!refreshing) { refreshing = true; location.reload(); }
+    });
+  }
 </script>
 </body>
 </html>
