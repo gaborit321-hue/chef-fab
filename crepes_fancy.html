@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Crêpes</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --cream: #faf6ef; --warm: #f0e8d8; --ink: #1a1208;
+  --gold: #c49a3c; --brown: #6b4c2a; --muted: #8a7560; --border: #d4c4a8;
+}
+body {
+  background: var(--cream);
+  font-family: 'Jost', sans-serif;
+  font-weight: 300;
+  padding: 2rem 1rem;
+  min-height: 100vh;
+}
+.card {
+  max-width: 480px; margin: 0 auto;
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 2px;
+  box-shadow: 4px 4px 0 var(--border);
+  overflow: hidden;
+}
+.header {
+  background: var(--ink);
+  padding: 2rem 2rem 1.5rem;
+  position: relative;
+}
+.header::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0; height: 3px;
+  background: repeating-linear-gradient(90deg, var(--gold) 0, var(--gold) 12px, transparent 12px, transparent 18px);
+}
+.header-label {
+  font-size: 10px; font-weight: 500; letter-spacing: .25em;
+  text-transform: uppercase; color: var(--gold); margin-bottom: 6px;
+}
+.header h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: 2.3rem; font-weight: 400; color: #fff; line-height: 1.1;
+}
+.header h1 em { font-style: italic; color: var(--gold); }
+.header-sub { font-size: 12px; color: var(--muted); margin-top: 6px; letter-spacing: .08em; }
+.body { padding: 0 2rem 2rem; }
+.toggle-wrap {
+  display: flex; border: 1px solid var(--border);
+  border-radius: 2px; overflow: hidden; margin: 1.5rem 0;
+}
+.toggle-btn {
+  flex: 1; padding: 10px; border: none;
+  background: transparent; color: var(--muted);
+  font-family: 'Jost', sans-serif; font-size: 12px; font-weight: 500;
+  letter-spacing: .12em; text-transform: uppercase; cursor: pointer;
+  transition: background .2s, color .2s;
+}
+.toggle-btn:first-child { border-right: 1px solid var(--border); }
+.toggle-btn.active { background: var(--ink); color: var(--gold); }
+.servings-row {
+  display: flex; align-items: baseline;
+  justify-content: space-between; margin-bottom: 10px;
+}
+.servings-label { font-size: 10px; font-weight: 500; letter-spacing: .2em; text-transform: uppercase; color: var(--muted); }
+.servings-count { font-family: 'Playfair Display', serif; font-size: 1.6rem; color: var(--ink); }
+input[type=range] {
+  width: 100%; height: 2px; -webkit-appearance: none;
+  background: var(--border); outline: none; border-radius: 0; margin-bottom: 1.5rem; display: block;
+}
+input[type=range]::-webkit-slider-thumb {
+  -webkit-appearance: none; width: 16px; height: 16px;
+  background: var(--ink); border: 2px solid var(--gold);
+  border-radius: 50%; cursor: pointer; transition: transform .15s;
+}
+input[type=range]::-webkit-slider-thumb:hover { transform: scale(1.2); }
+.divider { display: flex; align-items: center; gap: 10px; margin: 1.25rem 0; }
+.divider-line { flex: 1; height: 1px; background: var(--border); }
+.divider-diamond { width: 6px; height: 6px; background: var(--gold); transform: rotate(45deg); flex-shrink: 0; }
+.section-title {
+  font-size: 10px; font-weight: 500; letter-spacing: .2em;
+  text-transform: uppercase; color: var(--gold); margin: 1.5rem 0 .75rem;
+}
+.ingredient-row {
+  display: flex; justify-content: space-between; align-items: baseline;
+  padding: 9px 0; border-bottom: 1px dashed var(--border); gap: 1rem;
+}
+.ingredient-row:last-child { border-bottom: none; }
+.ing-name { font-size: 14px; color: var(--brown); display: flex; align-items: center; gap: 6px; }
+.badge-biere {
+  font-size: 9px; font-weight: 500; letter-spacing: .1em; text-transform: uppercase;
+  padding: 2px 6px; border: 1px solid var(--gold); color: var(--gold); border-radius: 2px;
+}
+.qty { font-family: 'Playfair Display', serif; font-size: 15px; color: var(--ink); font-weight: 600; white-space: nowrap; }
+.step { display: flex; gap: 14px; margin-bottom: 1rem; align-items: flex-start; }
+.step-num {
+  min-width: 22px; height: 22px; border: 1px solid var(--gold); color: var(--gold);
+  font-size: 11px; font-weight: 500; display: flex; align-items: center;
+  justify-content: center; flex-shrink: 0; margin-top: 1px;
+}
+.step-text { font-size: 13.5px; color: var(--brown); line-height: 1.65; font-weight: 300; padding-top: 2px; }
+.tip {
+  margin-top: 1.5rem; padding: 14px 16px;
+  background: var(--warm); border-left: 3px solid var(--gold);
+  font-size: 13px; color: var(--brown); line-height: 1.6;
+  font-style: italic; font-family: 'Playfair Display', serif;
+}
+.footer {
+  padding: 1rem 2rem; background: var(--warm); border-top: 1px solid var(--border);
+  text-align: center; font-size: 10px; letter-spacing: .18em;
+  text-transform: uppercase; color: var(--muted);
+}
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="header">
+    <div class="header-label">Recette de base</div>
+    <h1>Crêpes <em>faciles</em></h1>
+    <div class="header-sub">Tradition française — système métrique</div>
+  </div>
+  <div class="body">
+    <div class="toggle-wrap">
+      <button class="toggle-btn active" id="btn-sans" onclick="setMode('sans')">Sans bière</button>
+      <button class="toggle-btn" id="btn-avec" onclick="setMode('avec')">Avec bière</button>
+    </div>
+    <div class="servings-row">
+      <span class="servings-label">Nombre de crêpes</span>
+      <span class="servings-count" id="serv-out">6</span>
+    </div>
+    <input type="range" min="2" max="20" value="6" step="2" id="servings" oninput="updateServings(this.value)">
+    <div class="divider"><div class="divider-line"></div><div class="divider-diamond"></div><div class="divider-line"></div></div>
+    <div class="section-title">Ingrédients</div>
+    <div id="ingredients-list"></div>
+    <div class="divider"><div class="divider-line"></div><div class="divider-diamond"></div><div class="divider-line"></div></div>
+    <div class="section-title">Préparation</div>
+    <div id="steps-list"></div>
+    <div id="tip-biere" class="tip" style="display:none;">
+      La bière apporte du gaz carbonique — la pâte sera plus légère et aérée. Privilégie une blonde légère, et cuis dans les 30 minutes pour profiter des bulles.
+    </div>
+  </div>
+  <div class="footer">Bon appétit &nbsp;·&nbsp; Recette maison</div>
+</div>
+<script>
+let mode = 'sans', servings = 6;
+const base = 6;
+const ingredients = {
+  sans: [
+    { name: 'Farine', qty: 125, unit: 'g' },
+    { name: 'Œufs', qty: 2, unit: '' },
+    { name: 'Lait', qty: 250, unit: 'ml' },
+    { name: 'Sucre vanillé', qty: 1, unit: 'sachet' },
+    { name: 'Sel', qty: 1, unit: 'pincée' },
+    { name: 'Huile ou beurre fondu', qty: 1, unit: 'c.à.s.' },
+  ],
+  avec: [
+    { name: 'Farine', qty: 125, unit: 'g' },
+    { name: 'Œufs', qty: 2, unit: '' },
+    { name: 'Lait', qty: 125, unit: 'ml' },
+    { name: 'Bière blonde', qty: 125, unit: 'ml', isBiere: true },
+    { name: 'Sucre vanillé', qty: 1, unit: 'sachet' },
+    { name: 'Sel', qty: 1, unit: 'pincée' },
+    { name: 'Huile ou beurre fondu', qty: 1, unit: 'c.à.s.' },
+  ]
+};
+const steps = {
+  sans: [
+    'Dans un saladier, mélange la farine, le sel et le sucre.',
+    'Ajoute les œufs et mélange bien.',
+    'Verse le lait progressivement en fouettant pour éviter les grumeaux.',
+    "Ajoute l'huile ou le beurre fondu, mélange.",
+    'Laisse reposer 10–15 min.',
+    'Poêle bien chaude légèrement graissée — verse une louche, cuis ~1 min par face.'
+  ],
+  avec: [
+    'Dans un saladier, mélange la farine, le sel et le sucre.',
+    'Ajoute les œufs et mélange bien.',
+    'Verse le lait progressivement en fouettant pour éviter les grumeaux.',
+    "Ajoute l'huile ou le beurre fondu, mélange.",
+    'Verse la bière doucement en remuant délicatement pour garder les bulles.',
+    'Ne laisse pas trop reposer — cuis dans les 30 min.',
+    'Poêle bien chaude légèrement graissée — verse une louche, cuis ~1 min par face.'
+  ]
+};
+function fmt(ing, ratio) {
+  const val = Math.round(ing.qty * ratio);
+  return ing.unit ? val + ' ' + ing.unit : val;
+}
+function render() {
+  const ratio = servings / base;
+  document.getElementById('ingredients-list').innerHTML = ingredients[mode].map((i) =>
+    `<div class="ingredient-row">
+      <span class="ing-name">${i.name}${i.isBiere ? '<span class="badge-biere">bière</span>' : ''}</span>
+      <span class="qty">${fmt(i, ratio)}</span>
+    </div>`).join('');
+  document.getElementById('steps-list').innerHTML = steps[mode].map((s, idx) =>
+    `<div class="step">
+      <div class="step-num">${idx + 1}</div>
+      <div class="step-text">${s}</div>
+    </div>`).join('');
+  document.getElementById('tip-biere').style.display = mode === 'avec' ? 'block' : 'none';
+}
+function setMode(m) {
+  mode = m;
+  document.getElementById('btn-sans').classList.toggle('active', m === 'sans');
+  document.getElementById('btn-avec').classList.toggle('active', m === 'avec');
+  render();
+}
+function updateServings(val) {
+  servings = parseInt(val);
+  document.getElementById('serv-out').textContent = servings;
+  render();
+}
+render();
+</script>
+</body>
+</html>
