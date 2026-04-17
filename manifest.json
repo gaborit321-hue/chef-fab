@@ -1,13 +1,18 @@
 {
-  "name": "Chef Fab",
-  "short_name": "Chef Fab",
-  "description": "Ton chef cuisinier IA personnel",
-  "start_url": "/index.html",
+  "name": "Ma Cuisine",
+  "short_name": "Cuisine",
+  "description": "Mon carnet de recettes personnel",
+  "start_url": "./index.html",
   "display": "standalone",
-  "background_color": "#ffffff",
-  "theme_color": "#D85A30",
+  "background_color": "#0f0f0d",
+  "theme_color": "#1a1a18",
   "orientation": "portrait",
   "icons": [
-    { "src": "icon5.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+    {
+      "src": "icon5.png",
+      "sizes": "any",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
   ]
 }
