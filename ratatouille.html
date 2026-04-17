@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ratatouille Provençale</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --terracotta: #C1440E;
+    --gold: #D4920A;
+    --cream: #FAF3E8;
+    --warm-white: #FFF8F0;
+    --dark: #2C1A0E;
+    --olive: #6B7C3A;
+    --light-olive: #A8B86C;
+    --shadow: rgba(44,26,14,0.15);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Lato', sans-serif;
+    background-color: var(--cream);
+    color: var(--dark);
+    min-height: 100vh;
+  }
+
+  /* Header */
+  .hero {
+    background: linear-gradient(135deg, var(--terracotta) 0%, #8B2500 60%, var(--dark) 100%);
+    padding: 48px 24px 36px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -40px; left: -40px; right: -40px; bottom: -40px;
+    background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.04'%3E%3Ccircle cx='30' cy='30' r='4'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    pointer-events: none;
+  }
+  .hero-tag {
+    display: inline-block;
+    font-family: 'Lato', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 12px;
+  }
+  .hero h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(32px, 8vw, 52px);
+    color: #fff;
+    line-height: 1.1;
+    margin-bottom: 12px;
+  }
+  .hero h1 em {
+    font-style: italic;
+    color: #FFCBA4;
+  }
+  .hero-desc {
+    color: rgba(255,255,255,0.72);
+    font-size: 15px;
+    font-weight: 300;
+    max-width: 360px;
+    margin: 0 auto;
+    line-height: 1.6;
+  }
+
+  /* Portions control */
+  .portions-bar {
+    background: var(--warm-white);
+    border-bottom: 1px solid rgba(193,68,14,0.15);
+    padding: 18px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 12px var(--shadow);
+  }
+  .portions-label {
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--terracotta);
+  }
+  .portions-control {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    background: var(--cream);
+    border: 2px solid var(--terracotta);
+    border-radius: 40px;
+    overflow: hidden;
+  }
+  .portions-btn {
+    background: none;
+    border: none;
+    width: 40px;
+    height: 40px;
+    font-size: 20px;
+    font-weight: 300;
+    color: var(--terracotta);
+    cursor: pointer;
+    transition: background 0.2s;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .portions-btn:hover { background: rgba(193,68,14,0.1); }
+  .portions-btn:active { background: rgba(193,68,14,0.2); }
+  .portions-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--dark);
+    min-width: 36px;
+    text-align: center;
+  }
+  .portions-hint {
+    font-size: 12px;
+    color: #999;
+    font-style: italic;
+  }
+
+  /* Content */
+  .content {
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 0 16px 48px;
+  }
+
+  /* Section titles */
+  .section-title {
+    font-family: 'Lato', sans-serif;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--terracotta);
+    padding: 28px 0 14px;
+    border-bottom: 1px solid rgba(193,68,14,0.2);
+    margin-bottom: 0;
+  }
+
+  /* Ingredients */
+  .ingredient-list { list-style: none; }
+  .ingredient-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 13px 0;
+    border-bottom: 1px solid rgba(44,26,14,0.07);
+    animation: fadeIn 0.3s ease;
+  }
+  .ingredient-name {
+    font-size: 15px;
+    font-weight: 300;
+    color: var(--dark);
+  }
+  .ingredient-amount {
+    font-family: 'Playfair Display', serif;
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--terracotta);
+    white-space: nowrap;
+    margin-left: 12px;
+  }
+  .ingredient-unit {
+    font-family: 'Lato', sans-serif;
+    font-size: 12px;
+    font-weight: 400;
+    color: var(--gold);
+    margin-left: 4px;
+  }
+
+  /* Steps */
+  .steps-list { list-style: none; padding-top: 4px; }
+  .step {
+    display: flex;
+    gap: 16px;
+    padding: 20px 0;
+    border-bottom: 1px solid rgba(44,26,14,0.07);
+    cursor: pointer;
+    transition: background 0.2s;
+    border-radius: 8px;
+    padding-left: 4px;
+  }
+  .step:hover { background: rgba(193,68,14,0.04); }
+  .step.done .step-text { color: #aaa; text-decoration: line-through; }
+  .step.done .step-num { background: var(--olive); }
+  .step-num {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: var(--terracotta);
+    color: #fff;
+    font-family: 'Playfair Display', serif;
+    font-size: 14px;
+    font-weight: 700;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    margin-top: 2px;
+    transition: background 0.3s;
+  }
+  .step-body { flex: 1; }
+  .step-title {
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 6px;
+  }
+  .step-text {
+    font-size: 15px;
+    font-weight: 300;
+    line-height: 1.65;
+    color: var(--dark);
+    transition: color 0.3s;
+  }
+  .step-timer {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    margin-top: 10px;
+    background: rgba(193,68,14,0.08);
+    border: 1px solid rgba(193,68,14,0.2);
+    border-radius: 20px;
+    padding: 4px 12px;
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--terracotta);
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  .step-timer:hover { background: rgba(193,68,14,0.18); }
+  .step-timer.running { background: var(--terracotta); color: #fff; border-color: var(--terracotta); }
+
+  /* Notes */
+  .notes-box {
+    background: linear-gradient(135deg, #FFF8EC, #FFF3E0);
+    border-left: 4px solid var(--gold);
+    border-radius: 0 12px 12px 0;
+    padding: 20px 20px 20px 20px;
+    margin-top: 28px;
+  }
+  .notes-box h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 16px;
+    font-style: italic;
+    color: var(--gold);
+    margin-bottom: 12px;
+  }
+  .notes-box ul { list-style: none; }
+  .notes-box li {
+    font-size: 14px;
+    font-weight: 300;
+    line-height: 1.6;
+    color: var(--dark);
+    padding: 5px 0;
+    padding-left: 16px;
+    position: relative;
+  }
+  .notes-box li::before {
+    content: '✦';
+    position: absolute;
+    left: 0;
+    color: var(--gold);
+    font-size: 10px;
+    top: 7px;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(4px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="hero-tag">🍅 Cuisine Provençale</div>
+  <h1>Ratatouille <em>Provençale</em></h1>
+  <p class="hero-desc">Légumes mijotés, huile d'olive, herbes fraîches. Simple, généreux, parfumé.</p>
+</div>
+
+<div class="portions-bar">
+  <span class="portions-label">Portions</span>
+  <div class="portions-control">
+    <button class="portions-btn" id="btn-minus">−</button>
+    <span class="portions-num" id="portions-display">2</span>
+    <button class="portions-btn" id="btn-plus">+</button>
+  </div>
+  <span class="portions-hint">Tap une étape = faite ✓</span>
+</div>
+
+<div class="content">
+
+  <p class="section-title">Ingrédients</p>
+  <ul class="ingredient-list" id="ingredient-list"></ul>
+
+  <p class="section-title">Étapes</p>
+  <ol class="steps-list" id="steps-list"></ol>
+
+  <div class="notes-box">
+    <h3>Secrets de chef</h3>
+    <ul>
+      <li>Ne cuis jamais tous les légumes ensemble dès le début — chaque légume a son temps de cuisson.</li>
+      <li>La ratatouille est meilleure réchauffée le lendemain : les saveurs se mélangent encore plus.</li>
+      <li>Ajoute un filet d'huile d'olive cru au dressage pour la brillance.</li>
+      <li>Accompagne avec du pain de campagne grillé ou du riz.</li>
+    </ul>
+  </div>
+
+</div>
+
+<script>
+  const BASE = 2;
+
+  // Ingredients: { name, amount, unit, isSpoon }
+  // isSpoon = true → ne pas scaler, afficher tel quel
+  const INGREDIENTS = [
+    { name: "Courgette",                amount: 1,   unit: "",      spoon: false },
+    { name: "Aubergine",                amount: 1,   unit: "",      spoon: false },
+    { name: "Poivron rouge",            amount: 1,   unit: "",      spoon: false },
+    { name: "Poivron jaune",            amount: 1,   unit: "",      spoon: false },
+    { name: "Tomates bien mûres",       amount: 3,   unit: "",      spoon: false },
+    { name: "Gousses d'ail",            amount: 3,   unit: "",      spoon: false },
+    { name: "Oignon",                   amount: 1,   unit: "",      spoon: false },
+    { name: "Huile d'olive",            amount: 4,   unit: "c.à.s.", spoon: true },
+    { name: "Herbes de Provence",       amount: 1,   unit: "c.à.c.", spoon: true },
+    { name: "Sel",                      amount: 1,   unit: "c.à.c.", spoon: true },
+    { name: "Poivre noir moulu",        amount: 1,   unit: "pincée", spoon: true },
+    { name: "Basilic frais",            amount: 1,   unit: "poignée", spoon: true },
+  ];
+
+  const STEPS = [
+    {
+      title: "Tailler les légumes",
+      text: "Coupe la courgette et l'aubergine en dés d'environ 2 cm. Épépine les poivrons, taille-les pareil. Émince l'oignon et l'ail. Pèle les tomates et concasse-les grossièrement. <strong>Conseil de chef :</strong> tous les légumes doivent avoir la même taille pour cuire uniformément.",
+      timer: null
+    },
+    {
+      title: "Faire suer l'oignon et l'ail",
+      text: "Dans une grande cocotte, chauffe l'huile d'olive à feu moyen. Ajoute l'oignon et l'ail. Fais-les suer <strong>5 minutes</strong> sans les colorer — ils doivent devenir translucides et parfumés.",
+      timer: 300
+    },
+    {
+      title: "Cuire les poivrons",
+      text: "Ajoute les poivrons. Fais revenir <strong>5 minutes</strong> à feu moyen-vif en remuant. Les poivrons doivent commencer à ramollir légèrement.",
+      timer: 300
+    },
+    {
+      title: "Ajouter l'aubergine",
+      text: "Incorpore l'aubergine. Remue bien pour l'enrober d'huile. Laisse cuire <strong>5 minutes</strong> — l'aubergine absorbe beaucoup, c'est normal, ne rajoute pas d'huile.",
+      timer: 300
+    },
+    {
+      title: "Ajouter courgette et tomates",
+      text: "Ajoute la courgette, puis les tomates. Saupoudre les herbes de Provence, le sel et le poivre. Mélange délicatement. Les tomates vont rendre leur jus et créer la sauce naturellement.",
+      timer: null
+    },
+    {
+      title: "Mijoter à couvert",
+      text: "Couvre et laisse mijoter à feu doux pendant <strong>30 minutes</strong>. Les légumes doivent être fondants mais pas en purée. À mi-cuisson, vérifie et remue doucement.",
+      timer: 1800
+    },
+    {
+      title: "Finition et dressage",
+      text: "Goûte et rectifie l'assaisonnement. Dépose quelques feuilles de basilic frais par-dessus juste avant de servir — jamais pendant la cuisson pour garder tout le parfum. Sers chaud, tiède ou froid le lendemain.",
+      timer: null
+    },
+  ];
+
+  let portions = 2;
+  const timers = {};
+
+  function scale(amount, isSpoon) {
+    if (isSpoon) return amount; // jamais scalé
+    const scaled = amount * portions / BASE;
+    return Math.round(scaled);
+  }
+
+  function renderIngredients() {
+    const list = document.getElementById('ingredient-list');
+    list.innerHTML = '';
+    INGREDIENTS.forEach(ing => {
+      const amt = scale(ing.amount, ing.spoon);
+      const li = document.createElement('li');
+      li.className = 'ingredient-item';
+      li.innerHTML = `
+        <span class="ingredient-name">${ing.name}</span>
+        <span class="ingredient-amount">${amt}<span class="ingredient-unit">${ing.unit ? ' ' + ing.unit : ''}</span></span>
+      `;
+      list.appendChild(li);
+    });
+  }
+
+  function formatTime(s) {
+    const m = Math.floor(s / 60);
+    const sec = s % 60;
+    return m > 0 ? `${m} min ${sec > 0 ? sec + 's' : ''}`.trim() : `${sec}s`;
+  }
+
+  function renderSteps() {
+    const list = document.getElementById('steps-list');
+    list.innerHTML = '';
+    STEPS.forEach((step, i) => {
+      const li = document.createElement('li');
+      li.className = 'step';
+      li.dataset.index = i;
+
+      let timerHTML = '';
+      if (step.timer) {
+        timerHTML = `<div class="step-timer" data-duration="${step.timer}" data-index="${i}" id="timer-btn-${i}">⏱ ${formatTime(step.timer)}</div>`;
+      }
+
+      li.innerHTML = `
+        <div class="step-num">${i + 1}</div>
+        <div class="step-body">
+          <div class="step-title">${step.title}</div>
+          <div class="step-text">${step.text}</div>
+          ${timerHTML}
+        </div>
+      `;
+
+      // Toggle done on click (not on timer)
+      li.addEventListener('click', (e) => {
+        if (e.target.closest('.step-timer')) return;
+        li.classList.toggle('done');
+      });
+
+      list.appendChild(li);
+    });
+
+    // Timer buttons
+    document.querySelectorAll('.step-timer').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const idx = btn.dataset.index;
+        const duration = parseInt(btn.dataset.duration);
+        startTimer(idx, duration, btn);
+      });
+    });
+  }
+
+  function startTimer(idx, duration, btn) {
+    if (timers[idx]) {
+      clearInterval(timers[idx].interval);
+      delete timers[idx];
+      btn.classList.remove('running');
+      btn.textContent = `⏱ ${formatTime(duration)}`;
+      return;
+    }
+    let remaining = duration;
+    btn.classList.add('running');
+    btn.textContent = `⏹ ${formatTime(remaining)}`;
+
+    timers[idx] = {
+      interval: setInterval(() => {
+        remaining--;
+        if (remaining <= 0) {
+          clearInterval(timers[idx].interval);
+          delete timers[idx];
+          btn.classList.remove('running');
+          btn.textContent = `✅ Terminé !`;
+          if ('vibrate' in navigator) navigator.vibrate([200, 100, 200]);
+        } else {
+          btn.textContent = `⏹ ${formatTime(remaining)}`;
+        }
+      }, 1000)
+    };
+  }
+
+  // Portions buttons
+  document.getElementById('btn-minus').addEventListener('click', () => {
+    if (portions > 1) { portions--; update(); }
+  });
+  document.getElementById('btn-plus').addEventListener('click', () => {
+    if (portions < 20) { portions++; update(); }
+  });
+
+  function update() {
+    document.getElementById('portions-display').textContent = portions;
+    renderIngredients();
+    renderSteps();
+  }
+
+  update();
+</script>
+</body>
+</html>
