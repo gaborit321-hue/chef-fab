@@ -1,21 +1,66 @@
-const CACHE = 'chef-fab-v1';
-const ASSETS = ['/', '/index.html'];
+// ============================================================
+//  Service Worker — Ma Cuisine PWA
+//  👉 Change CACHE_VERSION à chaque mise à jour pour purger le cache
+// ============================================================
 
-self.addEventListener('install', e => {
-  e.waitUntil(caches.open(CACHE).then(c => c.addAll(ASSETS)));
-  self.skipWaiting();
+
+const CACHE_VERSION = 'v1.0.0';
+const CACHE_NAME = `ma-cuisine-${CACHE_VERSION}`;
+
+// Fichiers à mettre en cache au premier chargement
+const ASSETS = [
+  './',
+  './index.html',
+  './crepes.html',
+  './ratatouille.html',
+];
+
+// ── Installation : mise en cache des assets ──────────────────
+self.addEventListener('install', event => {
+  event.waitUntil(
+    caches.open(CACHE_NAME)
+      .then(cache => cache.addAll(ASSETS))
+      .then(() => self.skipWaiting())  // active immédiatement sans attendre
+  );
 });
 
-self.addEventListener('activate', e => {
-  e.waitUntil(caches.keys().then(keys =>
-    Promise.all(keys.filter(k => k !== CACHE).map(k => caches.delete(k)))
-  ));
-  self.clients.claim();
+// ── Activation : supprime les anciens caches ─────────────────
+self.addEventListener('activate', event => {
+  event.waitUntil(
+    caches.keys().then(keys =>
+      Promise.all(
+        keys
+          .filter(key => key.startsWith('ma-cuisine-') && key !== CACHE_NAME)
+          .map(key => {
+            console.log(`[SW] Suppression ancien cache : ${key}`);
+            return caches.delete(key);
+          })
+      )
+    ).then(() => self.clients.claim())  // prend le contrôle de tous les onglets ouverts
+  );
 });
 
-self.addEventListener('fetch', e => {
-  if (e.request.method !== 'GET') return;
-  e.respondWith(
-    fetch(e.request).catch(() => caches.match(e.request))
+// ── Fetch : Cache-first, fallback réseau ─────────────────────
+self.addEventListener('fetch', event => {
+  // On ignore les requêtes non-GET (POST, etc.)
+  if (event.request.method !== 'GET') return;
+
+  event.respondWith(
+    caches.match(event.request).then(cached => {
+      if (cached) return cached;
+
+      // Pas en cache → on fetch et on met en cache dynamiquement
+      return fetch(event.request).then(response => {
+        if (!response || response.status !== 200 || response.type === 'opaque') {
+          return response;
+        }
+        const clone = response.clone();
+        caches.open(CACHE_NAME).then(cache => cache.put(event.request, clone));
+        return response;
+      });
+    }).catch(() => {
+      // Hors ligne et pas en cache → page de fallback si dispo
+      return caches.match('./index.html');
+    })
   );
 });
