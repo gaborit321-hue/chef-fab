@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Soupe Carottes & Gingembre</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --orange:    #E8620A;
+    --orange-lt: #F5A05A;
+    --cream:     #FDF6EC;
+    --brown:     #3D1F0A;
+    --brown-lt:  #7A4B2A;
+    --step-done: #c8e6c9;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--cream);
+    color: var(--brown);
+    min-height: 100vh;
+    padding: 0 0 60px;
+  }
+
+  /* ── HERO ── */
+  .hero {
+    background: var(--orange);
+    padding: 48px 32px 36px;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    right: -60px; top: -60px;
+    width: 260px; height: 260px;
+    border-radius: 50%;
+    background: var(--orange-lt);
+    opacity: .35;
+  }
+  .hero-label {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,.75);
+    margin-bottom: 12px;
+  }
+  .hero h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(30px, 6vw, 46px);
+    color: #fff;
+    line-height: 1.15;
+    position: relative;
+  }
+  .hero h1 em { font-style: italic; color: var(--cream); }
+  .hero-meta {
+    display: flex; gap: 24px; margin-top: 22px; flex-wrap: wrap;
+  }
+  .hero-meta span {
+    font-size: 13px; color: rgba(255,255,255,.85);
+    display: flex; align-items: center; gap: 6px;
+  }
+  .hero-meta .dot {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: rgba(255,255,255,.6);
+  }
+
+  /* ── CONTENT ── */
+  .container { max-width: 720px; margin: 0 auto; padding: 0 20px; }
+
+  /* ── SERVINGS ── */
+  .servings-bar {
+    background: #fff;
+    border: 2px solid var(--orange);
+    border-radius: 16px;
+    padding: 18px 24px;
+    margin: 28px 0 0;
+    display: flex; align-items: center; justify-content: space-between; gap: 16px;
+    flex-wrap: wrap;
+  }
+  .servings-bar label {
+    font-weight: 500; font-size: 14px; color: var(--brown-lt);
+  }
+  .servings-ctrl { display: flex; align-items: center; gap: 12px; }
+  .servings-ctrl button {
+    width: 36px; height: 36px; border-radius: 50%;
+    border: 2px solid var(--orange);
+    background: #fff; color: var(--orange);
+    font-size: 20px; font-weight: 700; cursor: pointer;
+    transition: all .15s;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .servings-ctrl button:hover { background: var(--orange); color: #fff; }
+  .servings-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 26px; font-weight: 700; color: var(--orange);
+    min-width: 32px; text-align: center;
+  }
+
+  /* ── SECTION TITLES ── */
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
+    color: var(--orange);
+    margin: 36px 0 16px;
+    padding-left: 16px;
+    border-left: 4px solid var(--orange-lt);
+  }
+
+  /* ── INGREDIENTS ── */
+  .ing-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 10px;
+  }
+  .ing-card {
+    background: #fff;
+    border-radius: 12px;
+    padding: 14px 18px;
+    border: 1.5px solid #f0dbc8;
+    display: flex; align-items: center; gap: 12px;
+  }
+  .ing-dot {
+    width: 10px; height: 10px; border-radius: 50%;
+    background: var(--orange-lt); flex-shrink: 0;
+  }
+  .ing-name { font-size: 14px; color: var(--brown-lt); }
+  .ing-qty  { font-size: 16px; font-weight: 500; color: var(--brown); }
+
+  /* ── STEPS ── */
+  .steps { display: flex; flex-direction: column; gap: 14px; }
+  .step {
+    background: #fff;
+    border-radius: 14px;
+    padding: 18px 20px 18px 72px;
+    border: 1.5px solid #f0dbc8;
+    position: relative;
+    cursor: pointer;
+    transition: border-color .2s, background .2s;
+  }
+  .step.done { background: #fffdf9; border-color: #b2dfdb; }
+  .step-num {
+    position: absolute; left: 18px; top: 50%; transform: translateY(-50%);
+    width: 36px; height: 36px; border-radius: 50%;
+    background: var(--orange); color: #fff;
+    font-family: 'Playfair Display', serif; font-size: 17px;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 700; flex-shrink: 0;
+    transition: background .2s;
+  }
+  .step.done .step-num { background: #4caf50; }
+  .step-title { font-weight: 500; font-size: 15px; margin-bottom: 4px; }
+  .step p { font-size: 14px; color: var(--brown-lt); line-height: 1.6; }
+  .step .chef-tip {
+    margin-top: 10px; padding: 10px 14px;
+    background: #fff8f0; border-left: 3px solid var(--orange-lt);
+    border-radius: 0 8px 8px 0;
+    font-size: 13px; color: var(--brown-lt);
+  }
+  .step .chef-tip strong { color: var(--orange); }
+
+  /* ── FOOTER NOTE ── */
+  .note {
+    margin-top: 32px;
+    padding: 18px 22px;
+    background: var(--orange);
+    border-radius: 14px;
+    color: #fff;
+    font-size: 14px; line-height: 1.6;
+  }
+  .note strong { display: block; margin-bottom: 4px; font-size: 15px; }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="container">
+    <div class="hero-label">Entrée · Chef apprenti</div>
+    <h1>Soupe Carottes<br><em>& Gingembre</em></h1>
+    <div class="hero-meta">
+      <span><span class="dot"></span> 10 min de préparation</span>
+      <span><span class="dot"></span> 25 min de cuisson</span>
+      <span><span class="dot"></span> Très facile</span>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- SERVINGS -->
+  <div class="servings-bar">
+    <label>Nombre de personnes</label>
+    <div class="servings-ctrl">
+      <button onclick="changeServ(-1)">−</button>
+      <div class="servings-num" id="servNum">4</div>
+      <button onclick="changeServ(1)">+</button>
+    </div>
+  </div>
+
+  <!-- INGREDIENTS -->
+  <div class="section-title">Ingrédients</div>
+  <div class="ing-grid" id="ingGrid"></div>
+
+  <!-- STEPS -->
+  <div class="section-title">Étapes</div>
+  <div class="steps" id="steps"></div>
+
+  <!-- NOTE DU CHEF -->
+  <div class="note">
+    <strong>🍊 Note du chef</strong>
+    Pour une touche finale, verse un filet de crème fraîche en spirale au moment du service et parsème de quelques graines de courge grillées. Simple et élégant !
+  </div>
+
+</div>
+
+<script>
+  // ── DATA ──
+  // Quantités pour 4 personnes
+  const BASE = 4;
+  const ingredients = [
+    { name: 'Carottes',          qty: 600, unit: 'g' },
+    { name: 'Oignon',            qty: 1,   unit: 'pièce' },
+    { name: 'Gingembre frais',   qty: 20,  unit: 'g' },
+    { name: 'Bouillon de légumes', qty: 800, unit: 'ml' },
+    { name: 'Crème fraîche',     qty: 80,  unit: 'ml' },
+    { name: 'Huile d\'olive',    qty: 2,   unit: 'c.à.s.', fixed: true },
+    { name: 'Sel & poivre',      qty: null, unit: '', fixed: true },
+  ];
+
+  const steps = [
+    {
+      title: 'Prépare les légumes',
+      text: 'Épluche et coupe les carottes en rondelles d\'environ 1 cm. Émince l\'oignon. Râpe ou hache finement le gingembre frais. N\'aie pas peur d\'en mettre — c\'est lui qui donne du caractère.',
+      tip: null
+    },
+    {
+      title: 'Fais revenir',
+      text: 'Dans une grande casserole, fais chauffer l\'huile d\'olive à feu moyen. Ajoute l\'oignon et fais-le suer 3–4 minutes sans le colorer — il doit devenir translucide.',
+      tip: '👨‍🍳 Chef : "Suer" l\'oignon, c\'est le cuire doucement pour qu\'il ramollisse et libère son sucre, sans le faire brunir.'
+    },
+    {
+      title: 'Ajoute carottes & gingembre',
+      text: 'Verse les carottes et le gingembre râpé. Mélange bien et laisse revenir 2 minutes en remuant. Tu vas sentir le parfum du gingembre se libérer — c\'est bon signe !',
+      tip: null
+    },
+    {
+      title: 'Mouille & fais cuire',
+      text: 'Verse le bouillon de légumes. Porte à ébullition, puis baisse le feu et laisse mijoter à couvert pendant 20 minutes, jusqu\'à ce que les carottes soient bien tendres (teste avec la pointe d\'un couteau).',
+      tip: '👨‍🍳 Si tu n\'as pas de bouillon prêt, un cube dilué dans de l\'eau chaude fonctionne très bien.'
+    },
+    {
+      title: 'Mixe la soupe',
+      text: 'Retire du feu. Mixe le tout avec un mixeur plongeant jusqu\'à obtenir une texture lisse et veloutée. Ajoute la crème fraîche, mixe encore 10 secondes. Rectifie l\'assaisonnement en sel et poivre.',
+      tip: '👨‍🍳 Attention aux projections ! Commence à mixer en tenant le mixeur au fond de la casserole avant de l\'allumer.'
+    },
+    {
+      title: 'Sers & dresse',
+      text: 'Verse la soupe chaude dans des bols. Fais un filet de crème en spirale, quelques graines de courge ou un brin de coriandre. Sers immédiatement.',
+      tip: null
+    }
+  ];
+
+  // ── STATE ──
+  let servings = 4;
+  const doneSteps = new Set();
+
+  function round(val) { return Math.round(val); }
+
+  function getQty(item) {
+    if (item.fixed || item.qty === null) return item.qty;
+    return round(item.qty * servings / BASE);
+  }
+
+  // ── RENDER INGREDIENTS ──
+  function renderIng() {
+    const grid = document.getElementById('ingGrid');
+    grid.innerHTML = ingredients.map(item => {
+      const q = getQty(item);
+      const display = q === null ? '' : (item.unit === 'pièce'
+        ? `${q} pièce${q > 1 ? 's' : ''}`
+        : item.unit === 'c.à.s.' ? `${item.qty} ${item.unit}`
+        : `${q} ${item.unit}`);
+      return `
+        <div class="ing-card">
+          <span class="ing-dot"></span>
+          <div>
+            <div class="ing-qty">${display || '—'}</div>
+            <div class="ing-name">${item.name}</div>
+          </div>
+        </div>`;
+    }).join('');
+  }
+
+  // ── RENDER STEPS ──
+  function renderSteps() {
+    const cont = document.getElementById('steps');
+    cont.innerHTML = steps.map((s, i) => `
+      <div class="step${doneSteps.has(i) ? ' done' : ''}" onclick="toggleStep(${i})">
+        <div class="step-num">${doneSteps.has(i) ? '✓' : i + 1}</div>
+        <div class="step-title">${s.title}</div>
+        <p>${s.text}</p>
+        ${s.tip ? `<div class="chef-tip"><strong>Conseil chef :</strong> ${s.tip.replace(/^👨‍🍳[^:]+:\s*/, '')}</div>` : ''}
+      </div>`).join('');
+  }
+
+  function toggleStep(i) {
+    if (doneSteps.has(i)) doneSteps.delete(i); else doneSteps.add(i);
+    renderSteps();
+  }
+
+  function changeServ(delta) {
+    servings = Math.max(1, Math.min(12, servings + delta));
+    document.getElementById('servNum').textContent = servings;
+    renderIng();
+  }
+
+  // ── INIT ──
+  renderIng();
+  renderSteps();
+</script>
+</body>
+</html>
