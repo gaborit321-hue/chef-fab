@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gâteau Banane-Chocolat</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #1a1008;
+    --card: #231508;
+    --accent: #e8a020;
+    --accent2: #c0440a;
+    --text: #f5ead8;
+    --muted: #8a7060;
+    --line: #3a2510;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    min-height: 100vh;
+    padding: 32px 16px 64px;
+    background-image:
+      radial-gradient(ellipse at 20% 10%, rgba(232,160,32,0.08) 0%, transparent 50%),
+      radial-gradient(ellipse at 80% 80%, rgba(192,68,10,0.08) 0%, transparent 50%);
+  }
+
+  .container {
+    max-width: 520px;
+    margin: 0 auto;
+  }
+
+  header {
+    text-align: center;
+    margin-bottom: 36px;
+    animation: fadeDown 0.6s ease both;
+  }
+
+  .emoji { font-size: 3rem; display: block; margin-bottom: 8px; }
+
+  h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--accent);
+    line-height: 1.1;
+  }
+
+  .subtitle {
+    font-size: 0.85rem;
+    color: var(--muted);
+    margin-top: 6px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  /* Slider card */
+  .slider-card {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    padding: 24px;
+    margin-bottom: 24px;
+    animation: fadeUp 0.5s 0.1s ease both;
+  }
+
+  .slider-label {
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--muted);
+    margin-bottom: 14px;
+  }
+
+  .slider-row {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  input[type=range] {
+    flex: 1;
+    -webkit-appearance: none;
+    height: 4px;
+    border-radius: 2px;
+    background: var(--line);
+    outline: none;
+    cursor: pointer;
+  }
+
+  input[type=range]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 22px; height: 22px;
+    border-radius: 50%;
+    background: var(--accent);
+    border: 3px solid var(--bg);
+    box-shadow: 0 0 0 2px var(--accent);
+    cursor: pointer;
+    transition: transform 0.15s;
+  }
+
+  input[type=range]::-webkit-slider-thumb:hover { transform: scale(1.2); }
+
+  .person-count {
+    font-family: 'Playfair Display', serif;
+    font-size: 2rem;
+    color: var(--accent);
+    min-width: 42px;
+    text-align: center;
+  }
+
+  .person-label {
+    font-size: 0.8rem;
+    color: var(--muted);
+    min-width: 60px;
+  }
+
+  /* Cuisson info */
+  .info-row {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 24px;
+    animation: fadeUp 0.5s 0.2s ease both;
+  }
+
+  .info-pill {
+    flex: 1;
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 14px;
+    text-align: center;
+  }
+
+  .info-pill .val {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.4rem;
+    color: var(--accent2);
+  }
+
+  .info-pill .lbl {
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--muted);
+    margin-top: 2px;
+  }
+
+  /* Ingredients */
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.1rem;
+    color: var(--accent);
+    margin-bottom: 14px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .ingredients-card {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    padding: 20px 24px;
+    margin-bottom: 24px;
+    animation: fadeUp 0.5s 0.3s ease both;
+  }
+
+  .ingredient {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--line);
+    transition: background 0.2s;
+  }
+
+  .ingredient:last-child { border-bottom: none; }
+
+  .ing-name {
+    font-size: 0.95rem;
+    font-weight: 300;
+  }
+
+  .ing-qty {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.1rem;
+    color: var(--accent);
+    font-weight: 700;
+    transition: all 0.3s;
+  }
+
+  .ing-qty.changed {
+    color: var(--accent2);
+    transform: scale(1.15);
+  }
+
+  /* Étapes */
+  .steps-card {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    padding: 20px 24px;
+    animation: fadeUp 0.5s 0.4s ease both;
+  }
+
+  .step {
+    display: flex;
+    gap: 16px;
+    padding: 14px 0;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .step:last-child { border-bottom: none; }
+
+  .step-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.5rem;
+    color: var(--accent2);
+    opacity: 0.6;
+    min-width: 28px;
+    line-height: 1;
+    margin-top: 2px;
+  }
+
+  .step-text {
+    font-size: 0.9rem;
+    line-height: 1.6;
+    font-weight: 300;
+    color: var(--text);
+  }
+
+  .step-text strong { color: var(--accent); font-weight: 500; }
+
+  @keyframes fadeDown {
+    from { opacity: 0; transform: translateY(-20px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <header>
+    <span class="emoji">🍌🍫</span>
+    <h1>Gâteau Banane<br><em style="font-style:italic;">& Chocolat</em></h1>
+    <p class="subtitle">Moule papier · 200 °C · 20 min</p>
+  </header>
+
+  <!-- Slider -->
+  <div class="slider-card">
+    <div class="slider-label">Nombre de personnes</div>
+    <div class="slider-row">
+      <input type="range" id="slider" min="1" max="12" value="4" step="1">
+      <span class="person-count" id="countDisplay">4</span>
+      <span class="person-label" id="personLabel">personnes</span>
+    </div>
+  </div>
+
+  <!-- Infos cuisson -->
+  <div class="info-row">
+    <div class="info-pill"><div class="val">200°C</div><div class="lbl">Température</div></div>
+    <div class="info-pill"><div class="val">20 min</div><div class="lbl">Cuisson</div></div>
+    <div class="info-pill"><div class="val" id="mouleInfo">1 moule</div><div class="lbl">Moule papier</div></div>
+  </div>
+
+  <!-- Ingrédients -->
+  <div class="ingredients-card">
+    <div class="section-title">Ingrédients</div>
+    <div class="ingredient"><span class="ing-name">Bananes grosses</span><span class="ing-qty" id="q-bananes">2</span></div>
+    <div class="ingredient"><span class="ing-name">Œufs</span><span class="ing-qty" id="q-oeufs">2</span></div>
+    <div class="ingredient"><span class="ing-name">Jus de citron</span><span class="ing-qty" id="q-citron">1 filet</span></div>
+    <div class="ingredient"><span class="ing-name">Miel</span><span class="ing-qty" id="q-miel">30 g</span></div>
+    <div class="ingredient"><span class="ing-name">Farine</span><span class="ing-qty" id="q-farine">90 g</span></div>
+    <div class="ingredient"><span class="ing-name">Levure chimique</span><span class="ing-qty" id="q-levure">5 g</span></div>
+    <div class="ingredient"><span class="ing-name">Sel fin</span><span class="ing-qty" id="q-sel">1 pincée</span></div>
+    <div class="ingredient"><span class="ing-name">Chocolat noir (tablette)</span><span class="ing-qty" id="q-choco">100 g</span></div>
+  </div>
+
+  <!-- Étapes -->
+  <div class="steps-card">
+    <div class="section-title">Préparation</div>
+    <div class="step"><span class="step-num">1</span><span class="step-text"><strong>Préchauffe</strong> le four à <strong>200 °C</strong>. Prépare tes moules en papier sur une plaque.</span></div>
+    <div class="step"><span class="step-num">2</span><span class="step-text"><strong>Casse le chocolat</strong> en morceaux et fais-le fondre doucement au bain-marie ou au micro-ondes par tranches de 30 secondes. Laisse tiédir.</span></div>
+    <div class="step"><span class="step-num">3</span><span class="step-text"><strong>Écrase les bananes</strong> à la fourchette jusqu'à obtenir une purée lisse. Ajoute le filet de jus de citron.</span></div>
+    <div class="step"><span class="step-num">4</span><span class="step-text"><strong>Fouette les œufs</strong> avec le miel jusqu'à ce que le mélange blanchisse légèrement.</span></div>
+    <div class="step"><span class="step-num">5</span><span class="step-text"><strong>Incorpore</strong> la purée de banane, puis le chocolat fondu tiède. Mélange bien.</span></div>
+    <div class="step"><span class="step-num">6</span><span class="step-text"><strong>Ajoute</strong> la farine, la levure et la pincée de sel. Mélange juste assez pour homogénéiser — ne travaille pas trop la pâte !</span></div>
+    <div class="step"><span class="step-num">7</span><span class="step-text"><strong>Verse</strong> dans les moules en papier aux ¾ de hauteur. Enfourne <strong>20 minutes à 200 °C</strong>. Vérifie la cuisson avec la pointe d'un couteau — elle doit ressortir sèche.</span></div>
+    <div class="step"><span class="step-num">8</span><span class="step-text"><strong>Laisse refroidir</strong> 10 minutes avant de déguster. Bonne dégustation !</span></div>
+  </div>
+
+</div>
+
+<script>
+  // Base pour 4 personnes
+  const BASE = 4;
+  const ingredients = {
+    bananes:  { base: 2,   unit: '',    type: 'count' },
+    oeufs:    { base: 2,   unit: '',    type: 'count' },
+    miel:     { base: 30,  unit: 'g',   type: 'g' },
+    farine:   { base: 90,  unit: 'g',   type: 'g' },
+    levure:   { base: 5,   unit: 'g',   type: 'g' },
+    choco:    { base: 100, unit: 'g',   type: 'g' },
+  };
+
+  function animate(el) {
+    el.classList.remove('changed');
+    void el.offsetWidth;
+    el.classList.add('changed');
+    setTimeout(() => el.classList.remove('changed'), 400);
+  }
+
+  function update(val) {
+    const ratio = val / BASE;
+    document.getElementById('countDisplay').textContent = val;
+    document.getElementById('personLabel').textContent = val === 1 ? 'personne' : 'personnes';
+
+    // Moules
+    const moules = Math.max(1, Math.ceil(val / 4));
+    const mouleEl = document.getElementById('mouleInfo');
+    mouleEl.textContent = moules === 1 ? '1 moule' : moules + ' moules';
+
+    // Quantités
+    for (const [key, ing] of Object.entries(ingredients)) {
+      const el = document.getElementById('q-' + key);
+      let raw = ing.base * ratio;
+      let txt;
+      if (ing.type === 'count') {
+        const rounded = Math.max(1, Math.round(raw));
+        txt = String(rounded);
+      } else {
+        const rounded = Math.max(1, Math.round(raw));
+        txt = rounded + ' ' + ing.unit;
+      }
+      if (el.textContent !== txt) {
+        el.textContent = txt;
+        animate(el);
+      }
+    }
+
+    // Sel & citron : pas d'unité scalable
+    const selEl = document.getElementById('q-sel');
+    const selTxt = val <= 4 ? '1 pincée' : Math.ceil(val / 4) + ' pincées';
+    if (selEl.textContent !== selTxt) { selEl.textContent = selTxt; animate(selEl); }
+
+    const citronEl = document.getElementById('q-citron');
+    const citronTxt = val <= 4 ? '1 filet' : Math.ceil(val / 4) + ' filets';
+    if (citronEl.textContent !== citronTxt) { citronEl.textContent = citronTxt; animate(citronEl); }
+  }
+
+  const slider = document.getElementById('slider');
+  slider.addEventListener('input', () => update(parseInt(slider.value)));
+  update(4);
+</script>
+</body>
+</html>
