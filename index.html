@@ -32,7 +32,9 @@
   .brand-title em { font-style: italic; color: var(--accent); }
   .recipe-count { font-family: 'Cormorant Garamond', serif; font-size: 13px; color: var(--muted); text-align: right; line-height: 1.4; }
   .recipe-count strong { display: block; font-family: 'Cormorant Garamond', serif; font-size: 36px; font-weight: 300; color: var(--text); line-height: 1; }
-  .filters { display: flex; gap: 8px; margin-bottom: 28px; flex-wrap: wrap; }
+  .filters { display: flex; gap: 8px; margin-bottom: 28px; overflow-x: auto; scrollbar-width: none; -ms-overflow-style: none; padding-bottom: 4px; }
+  .filters::-webkit-scrollbar { display: none; }
+  .filter-btn { flex-shrink: 0; }
   .filter-btn { background: none; border: 0.5px solid var(--border); color: var(--muted); font-family: 'DM Sans', sans-serif; font-size: 12px; font-weight: 400; letter-spacing: 1.5px; text-transform: uppercase; padding: 7px 16px; border-radius: 40px; cursor: pointer; transition: all 0.2s; }
   .filter-btn:hover { border-color: var(--border-hover); color: var(--text); }
   .filter-btn.active { background: var(--accent); border-color: var(--accent); color: #0f0f0d; font-weight: 500; }
