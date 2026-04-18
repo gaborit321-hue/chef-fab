@@ -4,7 +4,7 @@
 // ============================================================
 
 
-const CACHE_VERSION = 'v1.2';
+const CACHE_VERSION = 'v1.3';
 const CACHE_NAME = `ma-cuisine-${CACHE_VERSION}`;
 
 // Fichiers à mettre en cache au premier chargement
@@ -14,6 +14,7 @@ const ASSETS = [
   './crepes.html',
   './ratatouille.html',
   './soupe_carottes_gingembre.html',
+  './gateau_banane_chocolat.html',
 ];
 
 // ── Installation : mise en cache des assets ──────────────────
