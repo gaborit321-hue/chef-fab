@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Banana Bread Protéiné Chocolat</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --ink: #1c1008;
+      --cream: #faf5ee;
+      --brown: #3a1c08;
+      --caramel: #b86e1e;
+      --choco: #5e2309;
+      --banana: #e2b830;
+      --muted: #907060;
+      --light: #ece2d4;
+      --done-bg: #f0e8dc;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background-color: var(--cream);
+      color: var(--ink);
+      font-family: 'Lato', sans-serif;
+      min-height: 100vh;
+      font-size: 16px;
+      line-height: 1.6;
+    }
+
+    /* ── HEADER ── */
+    header {
+      background-color: var(--brown);
+      color: var(--cream);
+      padding: 48px 40px 44px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    header::after {
+      content: '🍌';
+      position: absolute;
+      right: 20px;
+      bottom: -16px;
+      font-size: 140px;
+      opacity: 0.1;
+      transform: rotate(-10deg);
+      pointer-events: none;
+    }
+
+    .chef-label {
+      font-size: 11px;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--banana);
+      margin-bottom: 14px;
+    }
+
+    h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.9rem, 5vw, 3.2rem);
+      font-weight: 700;
+      line-height: 1.15;
+    }
+
+    h1 em { font-style: italic; color: var(--banana); }
+
+    /* ── SAISIE TRANCHES ── */
+    .slices-block {
+      margin-top: 28px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .slices-label {
+      font-size: 11px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: #b09a88;
+    }
+
+    .slices-controls {
+      display: flex;
+      align-items: center;
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.22);
+      border-radius: 6px;
+      overflow: hidden;
+    }
+
+    .slices-btn {
+      background: none;
+      border: none;
+      color: var(--banana);
+      font-size: 1.3rem;
+      font-weight: 700;
+      width: 42px;
+      height: 46px;
+      cursor: pointer;
+      transition: background 0.15s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .slices-btn:hover { background: rgba(255,255,255,0.12); }
+
+    input#slices {
+      -moz-appearance: textfield;
+      appearance: textfield;
+      background: none;
+      border: none;
+      border-left: 1px solid rgba(255,255,255,0.15);
+      border-right: 1px solid rgba(255,255,255,0.15);
+      color: var(--banana);
+      font-family: 'Playfair Display', serif;
+      font-size: 1.4rem;
+      font-weight: 700;
+      width: 60px;
+      text-align: center;
+      outline: none;
+      padding: 0;
+      height: 46px;
+    }
+
+    input#slices::-webkit-inner-spin-button,
+    input#slices::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
+
+    /* ── MACROS ── */
+    .macros {
+      display: flex;
+      gap: 16px;
+      margin-top: 22px;
+      flex-wrap: wrap;
+    }
+
+    .macro {
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.18);
+      border-radius: 6px;
+      padding: 10px 20px;
+      text-align: center;
+      min-width: 90px;
+    }
+
+    .macro-val {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: var(--banana);
+      display: block;
+    }
+
+    .macro-lbl {
+      font-size: 10px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #b09a88;
+      margin-top: 3px;
+      display: block;
+    }
+
+    /* ── MAIN : colonne unique ── */
+    main {
+      max-width: 640px;
+      margin: 0 auto;
+      padding: 48px 28px 80px;
+      display: flex;
+      flex-direction: column;
+      gap: 44px;
+    }
+
+    @media (max-width: 680px) {
+      main { padding: 32px 18px 60px; }
+      header { padding: 36px 20px 32px; }
+    }
+
+    /* ── SECTION TITLE ── */
+    .section-title {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--caramel);
+      margin-bottom: 18px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .section-title::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--light);
+    }
+
+    /* ── INGRÉDIENTS ── */
+    .ingredient-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .ingredient-item {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 12px 14px;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background 0.18s;
+      user-select: none;
+    }
+
+    .ingredient-item:hover { background: var(--light); }
+    .ingredient-item.checked { opacity: 0.42; }
+    .ingredient-item.checked .ing-name,
+    .ingredient-item.checked .qty {
+      text-decoration: line-through;
+      text-decoration-color: var(--muted);
+    }
+
+    .qty {
+      font-family: 'Playfair Display', serif;
+      font-weight: 700;
+      color: var(--choco);
+      font-size: 1rem;
+      min-width: 86px;
+      flex-shrink: 0;
+    }
+
+    @keyframes pop {
+      0%   { transform: scale(1); }
+      50%  { transform: scale(1.2); }
+      100% { transform: scale(1); }
+    }
+
+    .qty.changed { animation: pop 0.22s ease; color: var(--caramel); }
+
+    .ing-name { font-size: 0.95rem; color: var(--brown); flex: 1; }
+    .ing-name em { font-style: italic; color: var(--caramel); }
+
+    .optional-badge {
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      background: var(--banana);
+      color: var(--brown);
+      padding: 2px 7px;
+      border-radius: 3px;
+      flex-shrink: 0;
+    }
+
+    /* ── ÉTAPES ── */
+    .steps-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .step {
+      display: flex;
+      gap: 18px;
+      padding: 16px 18px;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background 0.18s, border-color 0.18s;
+      align-items: flex-start;
+      user-select: none;
+      border: 1px solid transparent;
+    }
+
+    .step:hover { background: var(--light); }
+    .step.done { background: var(--done-bg); border-color: var(--light); }
+
+    .step-num {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.6rem;
+      font-weight: 700;
+      color: var(--light);
+      line-height: 1;
+      min-width: 32px;
+      padding-top: 1px;
+      transition: color 0.2s;
+      flex-shrink: 0;
+    }
+
+    .step.done .step-num { color: var(--caramel); }
+    .step-content { flex: 1; }
+
+    .step-title {
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: var(--caramel);
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      margin-bottom: 5px;
+    }
+
+    .step-desc { font-size: 0.95rem; line-height: 1.7; color: var(--brown); }
+
+    .step.done .step-title,
+    .step.done .step-desc {
+      text-decoration: line-through;
+      text-decoration-color: var(--muted);
+      opacity: 0.5;
+    }
+
+    .step-check {
+      margin-top: 4px;
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      border: 2px solid var(--light);
+      flex-shrink: 0;
+      transition: background 0.2s, border-color 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .step.done .step-check { background: var(--caramel); border-color: var(--caramel); }
+    .step.done .step-check::after { content: '✓'; color: white; font-size: 12px; font-weight: 700; }
+
+    .temp-badge {
+      display: inline-block;
+      background: var(--choco);
+      color: var(--cream);
+      font-size: 0.85rem;
+      font-weight: 700;
+      padding: 1px 8px;
+      border-radius: 3px;
+    }
+
+    /* ── BLOCS BAS ── */
+    .chef-tip {
+      background: var(--brown);
+      color: var(--cream);
+      border-radius: 8px;
+      padding: 28px 32px;
+      display: flex;
+      gap: 22px;
+      align-items: flex-start;
+    }
+
+    .tip-icon { font-size: 2rem; flex-shrink: 0; margin-top: 2px; }
+
+    .tip-label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--banana);
+      margin-bottom: 10px;
+    }
+
+    .tip-text { font-size: 0.95rem; line-height: 1.75; color: #cbb9a6; }
+    .tip-text strong { color: var(--cream); font-weight: 700; }
+
+    .morning {
+      border: 2px solid var(--light);
+      border-radius: 8px;
+      padding: 22px 32px;
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .morning-icon { font-size: 2rem; flex-shrink: 0; }
+
+    .morning-title {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 6px;
+    }
+
+    .morning-text { font-size: 0.95rem; color: var(--brown); line-height: 1.6; }
+    .morning-text strong { color: var(--choco); font-weight: 700; }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(10px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    header .chef-label { animation: fadeUp 0.5s ease forwards 0.05s; opacity: 0; }
+    header h1          { animation: fadeUp 0.5s ease forwards 0.15s; opacity: 0; }
+    .slices-block      { animation: fadeUp 0.5s ease forwards 0.22s; opacity: 0; }
+    .macros            { animation: fadeUp 0.5s ease forwards 0.28s; opacity: 0; }
+    main > *           { animation: fadeUp 0.5s ease forwards 0.38s; opacity: 0; }
+    main > *:nth-child(2) { animation-delay: 0.46s; }
+    main > *:nth-child(3) { animation-delay: 0.54s; }
+    main > *:nth-child(4) { animation-delay: 0.62s; }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="chef-label">Recette du Chef</div>
+  <h1>Banana Bread<br><em>Protéiné Chocolat</em></h1>
+
+  <div class="slices-block">
+    <span class="slices-label">Tranches</span>
+    <div class="slices-controls">
+      <button class="slices-btn" id="btn-minus">−</button>
+      <input type="number" id="slices" value="8" min="1" max="999">
+      <button class="slices-btn" id="btn-plus">+</button>
+    </div>
+  </div>
+
+  <div class="macros">
+    <div class="macro">
+      <span class="macro-val">~200</span>
+      <span class="macro-lbl">kcal / tranche</span>
+    </div>
+    <div class="macro">
+      <span class="macro-val">~18 g</span>
+      <span class="macro-lbl">protéines / tranche</span>
+    </div>
+    <div class="macro">
+      <span class="macro-val">35–40</span>
+      <span class="macro-lbl">min au four</span>
+    </div>
+    <div class="macro">
+      <span class="macro-val">175 °C</span>
+      <span class="macro-lbl">température</span>
+    </div>
+  </div>
+</header>
+
+<main>
+
+  <!-- INGRÉDIENTS -->
+  <section class="ingredients">
+    <div class="section-title">Ingrédients</div>
+    <ul class="ingredient-list">
+      <li class="ingredient-item" onclick="this.classList.toggle('checked')">
+        <span class="qty" data-base="3" data-type="count" data-unit="">3</span>
+        <span class="ing-name">bananes <em>très</em> mûres</span>
+      </li>
+      <li class="ingredient-item" onclick="this.classList.toggle('checked')">
+        <span class="qty" data-base="3" data-type="count" data-unit="">3</span>
+        <span class="ing-name">œufs</span>
+      </li>
+      <li class="ingredient-item" onclick="this.classList.toggle('checked')">
+        <span class="qty" data-base="2" data-type="count" data-unit=" scoops">2 scoops</span>
+        <span class="ing-name">whey chocolat ou vanille</span>
+      </li>
+      <li class="ingredient-item" onclick="this.classList.toggle('checked')">
+        <span class="qty" data-base="80" data-type="g" data-unit=" g">80 g</span>
+        <span class="ing-name">flocons d'avoine mixés</span>
+      </li>
+      <li class="ingredient-item" onclick="this.classList.toggle('checked')">
+        <span class="qty" data-base="3" data-type="spoon" data-unit=" càs">3 càs</span>
+        <span class="ing-name">cacao pur non sucré</span>
+      </li>
+      <li class="ingredient-item" onclick="this.classList.toggle('checked')">
+        <span class="qty" data-base="1" data-type="spoon" data-unit=" càc">1 càc</span>
+        <span class="ing-name">levure chimique</span>
+      </li>
+      <li class="ingredient-item" onclick="this.classList.toggle('checked')">
+        <span class="qty" data-type="fixed">1 pincée</span>
+        <span class="ing-name">sel</span>
+      </li>
+      <li class="ingredient-item" onclick="this.classList.toggle('checked')">
+        <span class="qty" data-base="50" data-type="g" data-unit=" g">50 g</span>
+        <span class="ing-name">chocolat noir 70% concassé</span>
+      </li>
+    </ul>
+  </section>
+
+  <!-- ÉTAPES -->
+  <section class="steps-col">
+    <div class="section-title">Préparation</div>
+    <ol class="steps-list">
+
+      <li class="step" onclick="this.classList.toggle('done')">
+        <span class="step-num">01</span>
+        <div class="step-content">
+          <div class="step-title">Préchauffer le four</div>
+          <div class="step-desc">Régler à <span class="temp-badge">175 °C</span>. Beurrer le moule à cake, même s'il est antiadhésif.</div>
+        </div>
+        <div class="step-check"></div>
+      </li>
+
+      <li class="step" onclick="this.classList.toggle('done')">
+        <span class="step-num">02</span>
+        <div class="step-content">
+          <div class="step-title">Mixer les flocons</div>
+          <div class="step-desc">Mixer les <span class="dyn-flocons">80 g</span> de flocons d'avoine pour obtenir une farine fine. Réserver dans un bol.</div>
+        </div>
+        <div class="step-check"></div>
+      </li>
+
+      <li class="step" onclick="this.classList.toggle('done')">
+        <span class="step-num">03</span>
+        <div class="step-content">
+          <div class="step-title">Écraser les bananes</div>
+          <div class="step-desc">Écraser les <span class="dyn-bananes">3</span> bananes à la fourchette jusqu'à obtenir une purée lisse dans un grand saladier.</div>
+        </div>
+        <div class="step-check"></div>
+      </li>
+
+      <li class="step" onclick="this.classList.toggle('done')">
+        <span class="step-num">04</span>
+        <div class="step-content">
+          <div class="step-title">Ajouter les œufs</div>
+          <div class="step-desc">Casser les <span class="dyn-oeufs">3</span> œufs dans la purée de banane. Mélanger jusqu'à ce que l'ensemble soit homogène.</div>
+        </div>
+        <div class="step-check"></div>
+      </li>
+
+      <li class="step" onclick="this.classList.toggle('done')">
+        <span class="step-num">05</span>
+        <div class="step-content">
+          <div class="step-title">Incorporer les ingrédients secs</div>
+          <div class="step-desc">Ajouter la farine d'avoine, la whey (<span class="dyn-whey">2 scoops</span>), le cacao, la levure et le sel. Mélanger sans trop travailler la pâte.</div>
+        </div>
+        <div class="step-check"></div>
+      </li>
+
+      <li class="step" onclick="this.classList.toggle('done')">
+        <span class="step-num">06</span>
+        <div class="step-content">
+          <div class="step-title">Verser & garnir</div>
+          <div class="step-desc">Verser la pâte dans le moule. Parsemer le chocolat noir 70% concassé sur le dessus si désiré.</div>
+        </div>
+        <div class="step-check"></div>
+      </li>
+
+      <li class="step" onclick="this.classList.toggle('done')">
+        <span class="step-num">07</span>
+        <div class="step-content">
+          <div class="step-title">Cuire 35 à 40 min</div>
+          <div class="step-desc">Vérifier avec un couteau : il doit ressortir avec quelques miettes humides. Pas mouillé, pas propre.</div>
+        </div>
+        <div class="step-check"></div>
+      </li>
+
+    </ol>
+  </section>
+
+  <!-- CONSEIL DU CHEF -->
+  <div class="chef-tip">
+    <div class="tip-icon">👨‍🍳</div>
+    <div>
+      <div class="tip-label">Conseil du Chef</div>
+      <div class="tip-text">
+        Tes bananes doivent avoir la peau <strong>presque noire</strong> — c'est ce qui donne le sucre naturel et le moelleux.
+        Couteau propre = <strong>trop cuit</strong>. Couteau mouillé = <strong>encore 5 minutes</strong>.
+        Quelques miettes humides : <strong>c'est exactement ce qu'on veut</strong>.
+      </div>
+    </div>
+  </div>
+
+  <!-- SUGGESTION MATIN -->
+  <div class="morning">
+    <div class="morning-icon">🌅</div>
+    <div>
+      <div class="morning-title">Petit déjeuner express</div>
+      <div class="morning-text">
+        <strong>1 à 2 tranches + un verre de lait</strong> = petit déj complet en 2 minutes —
+        environ <strong>300–400 kcal</strong> et <strong>~25 g de protéines</strong>.
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<script>
+  const BASE = 8;
+  const input = document.getElementById('slices');
+
+  function scale(base, slices) {
+    return Math.max(1, Math.round(base * slices / BASE));
+  }
+
+  function flashQty(el) {
+    el.classList.remove('changed');
+    void el.offsetWidth;
+    el.classList.add('changed');
+    setTimeout(() => el.classList.remove('changed'), 300);
+  }
+
+  function update() {
+    let slices = parseInt(input.value);
+    if (isNaN(slices) || slices < 1) return; // attendre une valeur valide
+
+    document.querySelectorAll('.qty[data-base]').forEach(el => {
+      const base = parseFloat(el.dataset.base);
+      const unit = el.dataset.unit || '';
+      const val = scale(base, slices);
+      el.textContent = val + unit;
+      flashQty(el);
+    });
+
+    document.querySelectorAll('.dyn-flocons').forEach(el => el.textContent = scale(80, slices) + ' g');
+    document.querySelectorAll('.dyn-bananes').forEach(el => el.textContent = scale(3, slices));
+    document.querySelectorAll('.dyn-oeufs').forEach(el => el.textContent = scale(3, slices));
+    const w = scale(2, slices);
+    document.querySelectorAll('.dyn-whey').forEach(el => el.textContent = w + (w > 1 ? ' scoops' : ' scoop'));
+  }
+
+  document.getElementById('btn-minus').addEventListener('click', () => {
+    const v = parseInt(input.value) || 1;
+    if (v > 1) { input.value = v - 1; update(); }
+  });
+
+  document.getElementById('btn-plus').addEventListener('click', () => {
+    const v = parseInt(input.value) || 0;
+    input.value = v + 1;
+    update();
+  });
+
+  input.addEventListener('input', update);
+  update();
+</script>
+
+</body>
+</html>
