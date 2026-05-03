@@ -4,7 +4,7 @@
 // ============================================================
 
 
-const CACHE_VERSION = 'v1.8';
+const CACHE_VERSION = 'v1.9';
 const CACHE_NAME = `ma-cuisine-${CACHE_VERSION}`;
 
 // Fichiers à mettre en cache au premier chargement
