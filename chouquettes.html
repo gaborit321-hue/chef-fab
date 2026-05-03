@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Chouquettes</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --cream: #faf6ef;
+      --warm: #f2e8d5;
+      --brown: #6b3f1e;
+      --gold: #c8922a;
+      --dark: #2a1a0e;
+      --mid: #8c6240;
+      --light-mid: #d4a96a;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background-color: var(--cream);
+      color: var(--dark);
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 1000;
+      opacity: 0.6;
+    }
+
+    /* ── HERO ── */
+    .hero {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 4rem 2rem 6rem;
+      text-align: center;
+      overflow: hidden;
+    }
+
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 70% 60% at 50% 30%, #f5e6c8 0%, transparent 70%),
+        radial-gradient(ellipse 40% 40% at 80% 80%, #e8d4a8 0%, transparent 60%),
+        var(--cream);
+    }
+
+    .pearls { position: absolute; inset: 0; pointer-events: none; }
+    .pearl {
+      position: absolute;
+      border-radius: 50%;
+      background: white;
+      box-shadow: 0 2px 8px rgba(200,146,42,0.2), inset -2px -2px 4px rgba(0,0,0,0.06), inset 2px 2px 4px rgba(255,255,255,0.9);
+      opacity: 0;
+      animation: floatIn 1s forwards;
+    }
+    @keyframes floatIn {
+      from { opacity: 0; transform: translateY(20px) scale(0.5); }
+      to   { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    .label {
+      position: relative;
+      font-weight: 300;
+      font-style: italic;
+      font-size: clamp(0.85rem, 2vw, 1rem);
+      letter-spacing: 0.35em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 1.5rem;
+      opacity: 0;
+      animation: fadeUp 0.8s 0.2s forwards;
+    }
+
+    .title {
+      position: relative;
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: clamp(4rem, 14vw, 10rem);
+      font-weight: 700;
+      line-height: 0.9;
+      color: var(--brown);
+      margin-bottom: 1rem;
+      opacity: 0;
+      animation: fadeUp 0.9s 0.4s forwards;
+    }
+    .title em { font-style: italic; color: var(--gold); }
+
+    .subtitle {
+      position: relative;
+      font-size: clamp(1rem, 2.5vw, 1.3rem);
+      font-weight: 300;
+      font-style: italic;
+      color: var(--mid);
+      max-width: 480px;
+      line-height: 1.7;
+      margin-bottom: 2.5rem;
+      opacity: 0;
+      animation: fadeUp 0.9s 0.6s forwards;
+    }
+
+    .meta-row {
+      position: relative;
+      display: flex;
+      gap: 2.5rem;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin-bottom: 2.5rem;
+      opacity: 0;
+      animation: fadeUp 0.9s 0.8s forwards;
+    }
+
+    .meta-item { display: flex; flex-direction: column; align-items: center; gap: 0.25rem; }
+    .meta-value { font-family: 'Playfair Display', serif; font-size: 2rem; font-weight: 700; color: var(--brown); transition: all 0.3s ease; }
+    .meta-value.flash { transform: scale(1.2); color: var(--gold); }
+    .meta-label { font-size: 0.75rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--mid); }
+    .divider { width: 1px; height: 40px; background: var(--light-mid); opacity: 0.4; align-self: center; }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ── SELECTOR ── */
+    .selector-wrapper {
+      position: relative;
+      opacity: 0;
+      animation: fadeUp 0.9s 1s forwards;
+    }
+    .selector-label {
+      font-size: 0.72rem;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      color: var(--mid);
+      margin-bottom: 0.9rem;
+      display: block;
+    }
+    .selector-pills {
+      display: flex;
+      gap: 0.5rem;
+      justify-content: center;
+    }
+    .pill {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--mid);
+      background: transparent;
+      border: 1.5px solid var(--light-mid);
+      border-radius: 50px;
+      padding: 0.45rem 1.3rem;
+      cursor: pointer;
+      transition: all 0.22s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    .pill::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: var(--gold);
+      border-radius: inherit;
+      transform: scale(0);
+      transition: transform 0.22s ease;
+      z-index: 0;
+    }
+    .pill span { position: relative; z-index: 1; }
+    .pill:hover { border-color: var(--gold); color: var(--gold); }
+    .pill.active { border-color: var(--gold); color: white; }
+    .pill.active::before { transform: scale(1); }
+
+    /* ── WAVE ── */
+    .wave { width: 100%; line-height: 0; display: block; }
+    .wave svg { display: block; width: 100%; }
+
+    /* ── MAIN ── */
+    main { background: var(--warm); position: relative; }
+    .container { max-width: 860px; margin: 0 auto; padding: 5rem 2rem; }
+
+    .section-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.6rem, 4vw, 2.4rem);
+      color: var(--brown);
+      margin-bottom: 2rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+    .section-title::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: linear-gradient(to right, var(--light-mid), transparent);
+    }
+
+    /* ── INGREDIENTS ── */
+    .ingredients-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 1rem;
+      margin-bottom: 5rem;
+    }
+    .ingredient-card {
+      background: var(--cream);
+      border-radius: 12px;
+      padding: 1.2rem 1.4rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      box-shadow: 0 2px 12px rgba(107,63,30,0.06);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .ingredient-card:hover { transform: translateY(-3px); box-shadow: 0 6px 20px rgba(107,63,30,0.12); }
+    .ingredient-qty { min-width: 58px; text-align: right; }
+    .ingredient-amount {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: var(--gold);
+      line-height: 1;
+      transition: transform 0.25s ease, color 0.25s ease;
+    }
+    .ingredient-amount.updating { transform: scale(1.2); color: var(--brown); }
+    .ingredient-unit { font-size: 0.7rem; color: var(--mid); letter-spacing: 0.05em; }
+    .ingredient-name { font-size: 1rem; color: var(--dark); line-height: 1.3; }
+    .ingredient-sep { width: 1px; height: 28px; background: var(--light-mid); opacity: 0.35; flex-shrink: 0; }
+
+    /* ── STEPS ── */
+    .steps { display: flex; flex-direction: column; gap: 2.5rem; margin-bottom: 5rem; }
+    .step { display: grid; grid-template-columns: 60px 1fr; gap: 1.5rem; align-items: start; }
+    .step-number { font-family: 'Playfair Display', serif; font-size: 3.5rem; font-weight: 700; color: var(--light-mid); line-height: 1; text-align: right; opacity: 0.6; }
+    .step-content { padding-top: 0.4rem; }
+    .step-title { font-family: 'Playfair Display', serif; font-size: 1.15rem; color: var(--brown); margin-bottom: 0.5rem; }
+    .step-text { font-size: 1.05rem; font-weight: 300; color: #4a3020; line-height: 1.8; }
+    .step-timer {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      margin-top: 0.7rem;
+      font-size: 0.78rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--gold);
+      background: rgba(200,146,42,0.1);
+      padding: 0.3rem 0.7rem;
+      border-radius: 20px;
+    }
+
+    /* ── TIPS ── */
+    .tips-box {
+      background: var(--brown);
+      color: var(--cream);
+      border-radius: 16px;
+      padding: 2.5rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .tips-box::before {
+      content: '✦';
+      position: absolute;
+      right: 1.5rem;
+      top: 1rem;
+      font-size: 5rem;
+      opacity: 0.07;
+      color: var(--gold);
+      font-family: 'Playfair Display', serif;
+    }
+    .tips-box .section-title { color: var(--cream); font-size: 1.4rem; margin-bottom: 1.5rem; }
+    .tips-box .section-title::after { background: linear-gradient(to right, rgba(255,255,255,0.3), transparent); }
+    .tips-list { list-style: none; display: flex; flex-direction: column; gap: 1rem; }
+    .tips-list li { display: flex; gap: 1rem; font-size: 1rem; font-weight: 300; line-height: 1.6; color: #e8d4b0; }
+    .tips-list li::before { content: '—'; color: var(--gold); flex-shrink: 0; font-weight: 400; }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--dark);
+      color: rgba(255,255,255,0.3);
+      text-align: center;
+      padding: 2rem;
+      font-size: 0.8rem;
+      letter-spacing: 0.1em;
+      font-style: italic;
+    }
+
+    .reveal { opacity: 0; transform: translateY(20px); transition: opacity 0.7s ease, transform 0.7s ease; }
+    .reveal.visible { opacity: 1; transform: none; }
+  </style>
+</head>
+<body>
+
+  <section class="hero">
+    <div class="hero-bg"></div>
+    <div class="pearls" id="pearls"></div>
+
+    <p class="label">Pâtisserie française</p>
+    <h1 class="title">Chou<em>quettes</em></h1>
+    <p class="subtitle">Légères, dorées, croustillantes — parsemées de sucre perlé.</p>
+
+    <div class="meta-row">
+      <div class="meta-item">
+        <span class="meta-value" id="meta-pieces">40</span>
+        <span class="meta-label">pièces</span>
+      </div>
+      <div class="divider"></div>
+      <div class="meta-item">
+        <span class="meta-value">20'</span>
+        <span class="meta-label">préparation</span>
+      </div>
+      <div class="divider"></div>
+      <div class="meta-item">
+        <span class="meta-value">27'</span>
+        <span class="meta-label">cuisson</span>
+      </div>
+      <div class="divider"></div>
+      <div class="meta-item">
+        <span class="meta-value">180°</span>
+        <span class="meta-label">four</span>
+      </div>
+    </div>
+
+    <div class="selector-wrapper">
+      <span class="selector-label">Nombre de pièces</span>
+      <div class="selector-pills" id="pills">
+        <button class="pill" data-qty="10"><span>10</span></button>
+        <button class="pill" data-qty="20"><span>20</span></button>
+        <button class="pill" data-qty="30"><span>30</span></button>
+        <button class="pill active" data-qty="40"><span>40</span></button>
+        <button class="pill" data-qty="50"><span>50</span></button>
+      </div>
+    </div>
+  </section>
+
+  <div class="wave">
+    <svg viewBox="0 0 1440 80" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0,40 C360,80 1080,0 1440,40 L1440,80 L0,80 Z" fill="#f2e8d5"/>
+    </svg>
+  </div>
+
+  <main>
+    <div class="container">
+
+      <h2 class="section-title reveal">Ingrédients</h2>
+      <div class="ingredients-grid">
+
+        <div class="ingredient-card reveal">
+          <div class="ingredient-qty">
+            <div class="ingredient-amount" id="qty-eau">125</div>
+            <div class="ingredient-unit">ml</div>
+          </div>
+          <div class="ingredient-sep"></div>
+          <div class="ingredient-name">Eau</div>
+        </div>
+
+        <div class="ingredient-card reveal">
+          <div class="ingredient-qty">
+            <div class="ingredient-amount" id="qty-lait">125</div>
+            <div class="ingredient-unit">ml</div>
+          </div>
+          <div class="ingredient-sep"></div>
+          <div class="ingredient-name">Lait entier</div>
+        </div>
+
+        <div class="ingredient-card reveal">
+          <div class="ingredient-qty">
+            <div class="ingredient-amount" id="qty-beurre">100</div>
+            <div class="ingredient-unit">g</div>
+          </div>
+          <div class="ingredient-sep"></div>
+          <div class="ingredient-name">Beurre doux</div>
+        </div>
+
+        <div class="ingredient-card reveal">
+          <div class="ingredient-qty">
+            <div class="ingredient-amount" id="qty-farine">150</div>
+            <div class="ingredient-unit">g</div>
+          </div>
+          <div class="ingredient-sep"></div>
+          <div class="ingredient-name">Farine T55</div>
+        </div>
+
+        <div class="ingredient-card reveal">
+          <div class="ingredient-qty">
+            <div class="ingredient-amount" id="qty-oeufs">4</div>
+            <div class="ingredient-unit"></div>
+          </div>
+          <div class="ingredient-sep"></div>
+          <div class="ingredient-name">Œufs entiers (taille M)</div>
+        </div>
+
+        <div class="ingredient-card reveal">
+          <div class="ingredient-qty">
+            <div class="ingredient-amount" id="qty-sucre">10</div>
+            <div class="ingredient-unit">g</div>
+          </div>
+          <div class="ingredient-sep"></div>
+          <div class="ingredient-name">Sucre</div>
+        </div>
+
+        <div class="ingredient-card reveal">
+          <div class="ingredient-qty">
+            <div class="ingredient-amount" id="qty-sel">1</div>
+            <div class="ingredient-unit">c.c.</div>
+          </div>
+          <div class="ingredient-sep"></div>
+          <div class="ingredient-name">Sel</div>
+        </div>
+
+        <div class="ingredient-card reveal">
+          <div class="ingredient-qty">
+            <div class="ingredient-amount" id="qty-perle">100</div>
+            <div class="ingredient-unit">g</div>
+          </div>
+          <div class="ingredient-sep"></div>
+          <div class="ingredient-name">Sucre perlé</div>
+        </div>
+
+        <div class="ingredient-card reveal">
+          <div class="ingredient-qty">
+            <div class="ingredient-amount" id="qty-dorure">1</div>
+            <div class="ingredient-unit"></div>
+          </div>
+          <div class="ingredient-sep"></div>
+          <div class="ingredient-name">Œuf battu (dorure)</div>
+        </div>
+
+      </div>
+
+      <h2 class="section-title reveal">Préparation</h2>
+      <div class="steps">
+
+        <div class="step reveal">
+          <div class="step-number">1</div>
+          <div class="step-content">
+            <div class="step-title">Préchauffer le four</div>
+            <p class="step-text">Préchauffer le four à 180 °C (chaleur statique de préférence). Tapisser <span id="step-plaques">deux plaques</span> de papier sulfurisé.</p>
+          </div>
+        </div>
+
+        <div class="step reveal">
+          <div class="step-number">2</div>
+          <div class="step-content">
+            <div class="step-title">Préparer la panade</div>
+            <p class="step-text">Dans une casserole, porter à ébullition l'eau, le lait, le beurre, le sucre et le sel. Hors du feu, verser la farine en une seule fois et mélanger vigoureusement à la spatule.</p>
+          </div>
+        </div>
+
+        <div class="step reveal">
+          <div class="step-number">3</div>
+          <div class="step-content">
+            <div class="step-title">Dessécher la pâte</div>
+            <p class="step-text">Remettre la casserole sur feu moyen et mélanger sans arrêt pendant 1 à 2 min, jusqu'à ce que la pâte se décolle des parois et forme une boule. Une fine pellicule doit apparaître au fond.</p>
+            <span class="step-timer">⏱ 1 – 2 min</span>
+          </div>
+        </div>
+
+        <div class="step reveal">
+          <div class="step-number">4</div>
+          <div class="step-content">
+            <div class="step-title">Incorporer les œufs</div>
+            <p class="step-text">Transvaser la pâte dans un saladier et laisser tiédir 3 min. Incorporer les œufs un par un en fouettant bien entre chaque ajout. La pâte est prête quand elle forme un ruban lisse et brillant qui tombe lentement de la spatule.</p>
+            <span class="step-timer">⏱ Laisser tiédir 3 min</span>
+          </div>
+        </div>
+
+        <div class="step reveal">
+          <div class="step-number">5</div>
+          <div class="step-content">
+            <div class="step-title">Pocher les chouquettes</div>
+            <p class="step-text">Remplir une poche à douille (douille ronde n°10). Dresser des boules de 3 cm de diamètre sur les plaques en les espaçant de 4 cm. Badigeonner délicatement l'œuf battu à l'aide d'un pinceau, sans laisser couler sur les côtés.</p>
+          </div>
+        </div>
+
+        <div class="step reveal">
+          <div class="step-number">6</div>
+          <div class="step-content">
+            <div class="step-title">Sucre perlé & cuisson</div>
+            <p class="step-text">Parsemer généreusement de sucre perlé. Enfourner 25 à 28 min sans ouvrir le four. Les chouquettes doivent être bien dorées et sèches. Laisser refroidir sur une grille.</p>
+            <span class="step-timer">⏱ 25 – 28 min à 180 °C</span>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="tips-box reveal">
+        <h2 class="section-title">Astuces</h2>
+        <ul class="tips-list">
+          <li>Ne jamais ouvrir le four pendant la cuisson — les chouquettes retomberaient immédiatement.</li>
+          <li>La moitié lait / moitié eau apporte moelleux et belle couleur dorée, là où l'eau seule donne une coque plus sèche.</li>
+          <li>Si la pâte est trop ferme après les œufs, ajouter un demi-œuf battu et vérifier la consistance ruban.</li>
+          <li>Se dégustent le jour même, idéalement encore légèrement tièdes pour le maximum de croustillant.</li>
+        </ul>
+      </div>
+
+    </div>
+  </main>
+
+  <footer>Recette traditionnelle française &nbsp;·&nbsp; Pâte à choux</footer>
+
+  <script>
+    // Pearls
+    const pearlsEl = document.getElementById('pearls');
+    for (let i = 0; i < 22; i++) {
+      const p = document.createElement('div');
+      p.className = 'pearl';
+      const s = 8 + Math.random() * 18;
+      p.style.cssText = `width:${s}px;height:${s}px;left:${Math.random()*100}%;top:${Math.random()*100}%;animation-delay:${Math.random()*1.4}s;`;
+      pearlsEl.appendChild(p);
+    }
+
+    // Scroll reveal
+    const obs = new IntersectionObserver(entries => {
+      entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); } });
+    }, { threshold: 0.12 });
+    document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+
+    // Scaling
+    const BASE = 40;
+    const INGREDIENTS = {
+      eau:    { val: 125, dec: 0 },
+      lait:   { val: 125, dec: 0 },
+      beurre: { val: 100, dec: 0 },
+      farine: { val: 150, dec: 0 },
+      oeufs:  { val: 4,   dec: 1 },
+      sucre:  { val: 10,  dec: 0 },
+      sel:    { val: 1,   dec: 1 },
+      perle:  { val: 100, dec: 0 },
+      dorure: { val: 1,   dec: 1 },
+    };
+
+    function fmt(v, dec) {
+      if (dec === 0) return Math.round(v).toString();
+      const r = Math.round(v * 2) / 2;
+      return r % 1 === 0 ? r.toFixed(0) : r.toFixed(1);
+    }
+
+    function flash(el) {
+      el.classList.remove('updating');
+      void el.offsetWidth;
+      el.classList.add('updating');
+      setTimeout(() => el.classList.remove('updating'), 300);
+    }
+
+    function setQty(qty) {
+      const ratio = qty / BASE;
+
+      document.querySelectorAll('.pill').forEach(p =>
+        p.classList.toggle('active', parseInt(p.dataset.qty) === qty)
+      );
+
+      const metaEl = document.getElementById('meta-pieces');
+      metaEl.textContent = qty;
+      flash(metaEl);
+
+      // Plaques
+      const pl = qty <= 20 ? 'une plaque' : qty <= 40 ? 'deux plaques' : 'trois plaques';
+      document.getElementById('step-plaques').textContent = pl;
+
+      for (const [key, cfg] of Object.entries(INGREDIENTS)) {
+        const el = document.getElementById('qty-' + key);
+        if (!el) continue;
+        const nv = fmt(cfg.val * ratio, cfg.dec);
+        if (el.textContent !== nv) { el.textContent = nv; flash(el); }
+      }
+    }
+
+    document.getElementById('pills').addEventListener('click', e => {
+      const btn = e.target.closest('.pill');
+      if (btn) setQty(parseInt(btn.dataset.qty));
+    });
+  </script>
+</body>
+</html>
