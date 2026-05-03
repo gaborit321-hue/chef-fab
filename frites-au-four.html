@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Frites au Four</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0f0e0c;
+    --surface: #1a1814;
+    --card: #211f1b;
+    --gold: #e8b84b;
+    --gold-muted: #a07c28;
+    --text: #f0ebe0;
+    --text-muted: #8a8070;
+    --accent: #d45c2a;
+    --border: rgba(232, 184, 75, 0.15);
+    --radius: 12px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    min-height: 100vh;
+    padding: 40px 20px 80px;
+  }
+
+  .container {
+    max-width: 680px;
+    margin: 0 auto;
+  }
+
+  /* Header */
+  .header {
+    text-align: center;
+    margin-bottom: 48px;
+    padding-bottom: 32px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .tag {
+    display: inline-block;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold);
+    background: rgba(232,184,75,0.08);
+    border: 1px solid var(--border);
+    padding: 5px 14px;
+    border-radius: 100px;
+    margin-bottom: 20px;
+    font-weight: 500;
+  }
+
+  h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2.4rem, 6vw, 3.6rem);
+    font-weight: 900;
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    color: var(--text);
+    margin-bottom: 12px;
+  }
+
+  h1 span {
+    color: var(--gold);
+  }
+
+  .subtitle {
+    color: var(--text-muted);
+    font-size: 14px;
+    font-weight: 300;
+    letter-spacing: 0.02em;
+  }
+
+  /* Servings */
+  .servings-block {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 24px 28px;
+    margin-bottom: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+  }
+
+  .servings-label {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+
+  .servings-control {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+
+  .servings-btn {
+    background: none;
+    border: none;
+    color: var(--gold);
+    font-size: 20px;
+    width: 44px;
+    height: 44px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.15s;
+    font-weight: 300;
+  }
+
+  .servings-btn:hover { background: rgba(232,184,75,0.08); }
+  .servings-btn:active { background: rgba(232,184,75,0.15); }
+
+  .servings-value {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--text);
+    width: 48px;
+    text-align: center;
+    border-left: 1px solid var(--border);
+    border-right: 1px solid var(--border);
+    line-height: 44px;
+  }
+
+  .servings-meta {
+    font-size: 12px;
+    color: var(--text-muted);
+    font-style: italic;
+  }
+
+  /* Section title */
+  .section-title {
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold-muted);
+    font-weight: 500;
+    margin-bottom: 16px;
+    padding-left: 2px;
+  }
+
+  /* Ingredients */
+  .ingredients-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 40px;
+  }
+
+  .ingredient-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 16px 18px;
+    transition: border-color 0.2s;
+  }
+
+  .ingredient-card:hover { border-color: rgba(232,184,75,0.3); }
+
+  .ingredient-amount {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--gold);
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+
+  .ingredient-unit {
+    font-size: 11px;
+    color: var(--text-muted);
+  }
+
+  .ingredient-name {
+    font-size: 12px;
+    font-weight: 400;
+    color: var(--text);
+    margin-top: 8px;
+    line-height: 1.4;
+  }
+
+  .ingredient-card.optional {
+    border-style: dashed;
+    opacity: 0.75;
+  }
+
+  .opt-badge {
+    display: inline-block;
+    font-size: 9px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    background: rgba(255,255,255,0.04);
+    padding: 2px 7px;
+    border-radius: 4px;
+    margin-top: 6px;
+  }
+
+  /* Steps */
+  .steps {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 40px;
+  }
+
+  .step {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 20px 22px;
+    display: grid;
+    grid-template-columns: 36px 1fr;
+    gap: 14px;
+    align-items: start;
+  }
+
+  .step-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--gold);
+    background: rgba(232,184,75,0.08);
+    border: 1px solid var(--border);
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .step-content {}
+
+  .step-title {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text);
+    margin-bottom: 6px;
+    letter-spacing: 0.01em;
+  }
+
+  .step-text {
+    font-size: 13px;
+    font-weight: 300;
+    color: var(--text-muted);
+    line-height: 1.6;
+  }
+
+  .step-text strong {
+    color: var(--text);
+    font-weight: 500;
+  }
+
+  .timer-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 11px;
+    color: var(--accent);
+    background: rgba(212,92,42,0.08);
+    border: 1px solid rgba(212,92,42,0.2);
+    padding: 3px 10px;
+    border-radius: 100px;
+    margin-top: 10px;
+    font-weight: 500;
+  }
+
+  /* Notes */
+  .notes {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--gold);
+    border-radius: var(--radius);
+    padding: 20px 22px;
+  }
+
+  .note-item {
+    font-size: 13px;
+    font-weight: 300;
+    color: var(--text-muted);
+    line-height: 1.6;
+    padding: 6px 0;
+  }
+
+  .note-item + .note-item {
+    border-top: 1px solid rgba(255,255,255,0.04);
+  }
+
+  .note-item strong {
+    color: var(--gold);
+    font-weight: 500;
+  }
+
+  @media (max-width: 480px) {
+    .ingredients-grid { grid-template-columns: 1fr 1fr; }
+    .servings-block { flex-direction: column; text-align: center; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <div class="header">
+    <div class="tag">Recette four · Sans friture</div>
+    <h1>Frites au <span>Four</span></h1>
+    <p class="subtitle">Croustillantes dehors, fondantes dedans</p>
+  </div>
+
+  <!-- Servings -->
+  <div class="servings-block">
+    <div>
+      <div class="servings-label">Personnes</div>
+      <div class="servings-meta" id="meta-text">1 200 g de pommes de terre</div>
+    </div>
+    <div class="servings-control">
+      <button class="servings-btn" id="btn-minus">−</button>
+      <div class="servings-value" id="servings-display">4</div>
+      <button class="servings-btn" id="btn-plus">+</button>
+    </div>
+  </div>
+
+  <!-- Ingredients -->
+  <div class="section-title">Ingrédients</div>
+  <div class="ingredients-grid" id="ingredients-grid"></div>
+
+  <!-- Steps -->
+  <div class="section-title">Préparation</div>
+  <div class="steps">
+
+    <div class="step">
+      <div class="step-num">1</div>
+      <div class="step-content">
+        <div class="step-title">Préchauffer le four</div>
+        <div class="step-text">Préchauffer à <strong>220°C</strong> chaleur tournante. Placer la grille en position haute.</div>
+        <div class="timer-badge">⏱ 10 min</div>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-num">2</div>
+      <div class="step-content">
+        <div class="step-title">Préparer les pommes de terre</div>
+        <div class="step-text">Laver, éplucher et couper en bâtonnets réguliers d'environ <strong>1 cm</strong> d'épaisseur. Des frites uniformes cuisent de manière homogène.</div>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-num">3</div>
+      <div class="step-content">
+        <div class="step-title">Tremper et sécher <em style="color:var(--text-muted);font-size:11px;">(optionnel mais clé)</em></div>
+        <div class="step-text">Plonger dans un grand bol d'eau froide <strong>20 min</strong> pour retirer l'amidon. Égoutter puis sécher soigneusement avec un torchon.</div>
+        <div class="timer-badge">⏱ 20 min</div>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-num">4</div>
+      <div class="step-content">
+        <div class="step-title">Assaisonner</div>
+        <div class="step-text" id="step4-text">Mélanger les frites sèches avec l'huile, le sel, et les épices choisies. Bien enrober chaque bâtonnet.</div>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-num">5</div>
+      <div class="step-content">
+        <div class="step-title">Enfourner</div>
+        <div class="step-text">Étaler en <strong>une seule couche</strong> sur une plaque avec papier cuisson. Ne pas superposer — elles doivent rôtir, pas cuire à la vapeur.</div>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-num">6</div>
+      <div class="step-content">
+        <div class="step-title">Cuire et retourner</div>
+        <div class="step-text">Cuire <strong>25 min</strong>, retourner avec une spatule, puis poursuivre <strong>10–15 min</strong> jusqu'à coloration dorée et croustillante.</div>
+        <div class="timer-badge">⏱ 35–40 min</div>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-num">7</div>
+      <div class="step-content">
+        <div class="step-title">Servir</div>
+        <div class="step-text">Ajuster le sel si besoin. Servir <strong>immédiatement</strong> — les frites au four perdent leur croustillant en refroidissant.</div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Notes -->
+  <div class="section-title">Conseils</div>
+  <div class="notes">
+    <div class="note-item"><strong>Croustillant :</strong> bien sécher avant d'huiler, ne jamais superposer sur la plaque. Deux plaques si nécessaire.</div>
+    <div class="note-item"><strong>Variante épicée :</strong> remplacer le paprika par du čili jalapeño moulu — commencer léger, c'est plus concentré.</div>
+    <div class="note-item"><strong>Sans trempage :</strong> possible, mais résultat un peu moins croustillant.</div>
+  </div>
+
+</div>
+
+<script>
+  const BASE = 4;
+  let servings = 4;
+
+  const ingredients = [
+    { name: "Pommes de terre (Bintje/Agria)", baseG: 1200, unit: "g", optional: false },
+    { name: "Huile d'olive (ou tournesol)", baseG: 45, unit: "g", optional: false },
+    { name: "Sel", baseG: 9, unit: "g", optional: false },
+    { name: "Paprika fumé", baseG: 2.3, unit: "g", optional: true },
+    { name: "Čili Jalapeño moulu", baseG: 1, unit: "g", optional: true },
+  ];
+
+  function round1(val) {
+    return Math.round(val * 10) / 10;
+  }
+
+  function formatAmount(baseG, s) {
+    const val = round1(baseG * s / BASE);
+    return val >= 100 ? Math.round(val) : val;
+  }
+
+  function render() {
+    document.getElementById('servings-display').textContent = servings;
+    const potatoG = Math.round(1200 * servings / BASE);
+    document.getElementById('meta-text').textContent = `${potatoG} g de pommes de terre`;
+
+    const grid = document.getElementById('ingredients-grid');
+    grid.innerHTML = ingredients.map(ing => `
+      <div class="ingredient-card ${ing.optional ? 'optional' : ''}">
+        <div class="ingredient-amount">${formatAmount(ing.baseG, servings)}<span class="ingredient-unit"> ${ing.unit}</span></div>
+        <div class="ingredient-name">${ing.name}</div>
+        ${ing.optional ? '<span class="opt-badge">optionnel</span>' : ''}
+      </div>
+    `).join('');
+  }
+
+  document.getElementById('btn-plus').addEventListener('click', () => {
+    if (servings < 20) { servings++; render(); }
+  });
+
+  document.getElementById('btn-minus').addEventListener('click', () => {
+    if (servings > 1) { servings--; render(); }
+  });
+
+  render();
+</script>
+</body>
+</html>
