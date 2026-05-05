@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Spaghetti Carbonara</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --cream: #f5f0e8;
+    --warm: #ede4d0;
+    --gold: #c8973a;
+    --gold-light: #e8b85a;
+    --dark: #1a1612;
+    --mid: #3d3328;
+    --muted: #8a7a68;
+    --accent: #b84c2a;
+  }
+
+  body {
+    background: var(--cream);
+    color: var(--dark);
+    font-family: 'DM Mono', monospace;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* Grain texture overlay */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 100;
+    opacity: 0.4;
+  }
+
+  .page {
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 60px 24px 80px;
+  }
+
+  /* Header */
+  .header {
+    text-align: center;
+    margin-bottom: 64px;
+    animation: fadeUp 0.8s ease both;
+  }
+
+  .header-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 16px;
+  }
+
+  h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(42px, 8vw, 72px);
+    font-weight: 400;
+    line-height: 1.05;
+    color: var(--dark);
+    margin-bottom: 6px;
+  }
+
+  h1 em {
+    font-style: italic;
+    color: var(--gold);
+  }
+
+  .header-sub {
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    color: var(--muted);
+    margin-top: 14px;
+  }
+
+  /* Decorative line */
+  .deco-line {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin: 32px 0;
+  }
+  .deco-line::before, .deco-line::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(to right, transparent, var(--gold));
+  }
+  .deco-line::after { background: linear-gradient(to left, transparent, var(--gold)); }
+  .deco-line span { color: var(--gold); font-size: 14px; }
+
+  /* Persons selector */
+  .persons-section {
+    background: var(--dark);
+    border-radius: 2px;
+    padding: 28px 32px;
+    margin-bottom: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    animation: fadeUp 0.8s 0.1s ease both;
+  }
+
+  .persons-label {
+    font-size: 11px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .persons-control {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+
+  .persons-btn {
+    width: 36px;
+    height: 36px;
+    border: 1px solid var(--gold);
+    background: transparent;
+    color: var(--gold);
+    font-family: 'DM Mono', monospace;
+    font-size: 20px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.15s;
+    border-radius: 1px;
+    line-height: 1;
+  }
+  .persons-btn:hover { background: var(--gold); color: var(--dark); }
+  .persons-btn:disabled { opacity: 0.2; cursor: not-allowed; }
+  .persons-btn:disabled:hover { background: transparent; color: var(--gold); }
+
+  .persons-count {
+    font-family: 'Playfair Display', serif;
+    font-size: 36px;
+    color: var(--cream);
+    min-width: 40px;
+    text-align: center;
+  }
+
+  .persons-unit {
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 0.15em;
+  }
+
+  /* Ingredients */
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 11px;
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 24px;
+  }
+
+  .ingredients-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 56px;
+    animation: fadeUp 0.8s 0.2s ease both;
+  }
+
+  .ingredient {
+    background: var(--warm);
+    border: 1px solid rgba(200,151,58,0.2);
+    padding: 18px 20px;
+    border-radius: 2px;
+    transition: border-color 0.2s;
+  }
+  .ingredient:hover { border-color: var(--gold); }
+
+  .ingredient-amount {
+    font-family: 'Playfair Display', serif;
+    font-size: 26px;
+    color: var(--gold);
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+  .ingredient-unit {
+    font-size: 11px;
+    color: var(--muted);
+    display: inline;
+    margin-left: 3px;
+  }
+  .ingredient-name {
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    color: var(--mid);
+    margin-top: 6px;
+  }
+
+  /* Steps */
+  .steps {
+    animation: fadeUp 0.8s 0.3s ease both;
+  }
+
+  .step {
+    display: grid;
+    grid-template-columns: 48px 1fr;
+    gap: 20px;
+    margin-bottom: 28px;
+    padding-bottom: 28px;
+    border-bottom: 1px solid rgba(200,151,58,0.15);
+    position: relative;
+  }
+  .step:last-child { border-bottom: none; }
+
+  .step-number {
+    font-family: 'Playfair Display', serif;
+    font-size: 36px;
+    font-style: italic;
+    color: rgba(200,151,58,0.25);
+    line-height: 1;
+    padding-top: 2px;
+    text-align: right;
+  }
+
+  .step-content { }
+
+  .step-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 17px;
+    color: var(--dark);
+    margin-bottom: 8px;
+  }
+
+  .step-text {
+    font-size: 12px;
+    line-height: 1.8;
+    color: var(--mid);
+    letter-spacing: 0.02em;
+  }
+
+  .step-text strong {
+    color: var(--accent);
+    font-weight: 500;
+  }
+
+  /* Timer */
+  .timer-btn {
+    margin-top: 14px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--dark);
+    color: var(--cream);
+    border: none;
+    padding: 9px 18px;
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    cursor: pointer;
+    border-radius: 1px;
+    transition: all 0.15s;
+  }
+  .timer-btn:hover { background: var(--gold); color: var(--dark); }
+  .timer-btn.running { background: var(--accent); }
+  .timer-btn svg { width: 12px; height: 12px; }
+
+  .timer-display {
+    display: none;
+    align-items: center;
+    gap: 10px;
+    margin-top: 12px;
+    padding: 10px 16px;
+    background: var(--warm);
+    border-left: 2px solid var(--gold);
+    font-size: 13px;
+  }
+  .timer-display.active { display: flex; }
+  .timer-time {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
+    color: var(--gold);
+    min-width: 52px;
+  }
+  .timer-label { font-size: 10px; color: var(--muted); letter-spacing: 0.15em; }
+  .timer-done { color: var(--accent); font-size: 11px; letter-spacing: 0.15em; display: none; }
+
+  /* Tip box */
+  .tip {
+    background: var(--dark);
+    border-left: 3px solid var(--gold);
+    padding: 18px 22px;
+    margin-top: 10px;
+    border-radius: 0 2px 2px 0;
+  }
+  .tip-label {
+    font-size: 9px;
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 6px;
+  }
+  .tip p {
+    font-size: 11px;
+    line-height: 1.75;
+    color: #c4b89a;
+  }
+
+  /* Footer */
+  .footer {
+    margin-top: 64px;
+    text-align: center;
+    font-size: 10px;
+    letter-spacing: 0.25em;
+    color: var(--muted);
+    animation: fadeUp 0.8s 0.4s ease both;
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @media (max-width: 480px) {
+    .ingredients-grid { grid-template-columns: 1fr 1fr; }
+    .persons-section { flex-direction: column; text-align: center; gap: 16px; }
+    h1 { font-size: 48px; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <header class="header">
+    <div class="header-label">Recette classique</div>
+    <h1>Spaghetti<br><em>alla</em> Carbonara</h1>
+    <div class="header-sub">Sans crème · Sauce liée aux œufs · Tradition romaine</div>
+    <div class="deco-line"><span>✦</span></div>
+  </header>
+
+  <!-- Persons selector -->
+  <div class="persons-section">
+    <div class="persons-label">Nombre de personnes</div>
+    <div class="persons-control">
+      <button class="persons-btn" id="btn-minus" onclick="changePerson(-1)" disabled>−</button>
+      <div class="persons-count" id="persons-count">1</div>
+      <button class="persons-btn" id="btn-plus" onclick="changePerson(1)">+</button>
+      <div class="persons-unit" id="persons-unit">personne</div>
+    </div>
+  </div>
+
+  <!-- Ingredients -->
+  <section>
+    <div class="section-title">Ingrédients</div>
+    <div class="ingredients-grid">
+      <div class="ingredient">
+        <div class="ingredient-amount"><span class="qty" data-base="90" data-unit="g">90</span><span class="ingredient-unit">g</span></div>
+        <div class="ingredient-name">Spaghetti</div>
+      </div>
+      <div class="ingredient">
+        <div class="ingredient-amount"><span class="qty" data-base="2" data-unit="">2</span></div>
+        <div class="ingredient-name">Œufs entiers</div>
+      </div>
+      <div class="ingredient">
+        <div class="ingredient-amount"><span class="qty" data-base="50" data-unit="g">50</span><span class="ingredient-unit">g</span></div>
+        <div class="ingredient-name">Parmesan (ou Pecorino)</div>
+      </div>
+      <div class="ingredient">
+        <div class="ingredient-amount"><span class="qty" data-base="1" data-unit="">1</span></div>
+        <div class="ingredient-name">Louche d'eau de cuisson</div>
+      </div>
+      <div class="ingredient" style="grid-column: span 2;">
+        <div class="ingredient-amount" style="font-size:18px; padding-top:4px;">Q.S.</div>
+        <div class="ingredient-name">Poivre noir fraîchement moulu</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Steps -->
+  <section class="steps">
+    <div class="section-title">Préparation</div>
+
+    <!-- Step 1 -->
+    <div class="step">
+      <div class="step-number">1</div>
+      <div class="step-content">
+        <div class="step-title">Préparer la sauce à froid</div>
+        <div class="step-text">
+          Dans un bol, fouetter les <strong>œufs</strong> avec le <strong>parmesan râpé finement</strong> et une généreuse quantité de <strong>poivre noir</strong>. La texture doit être lisse et nappante. Réserver à température ambiante — surtout pas au frigo.
+        </div>
+        <div class="tip">
+          <div class="tip-label">Conseil</div>
+          <p>Plus le parmesan est râpé finement, plus la sauce sera lisse. Un microplane fait toute la différence.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Step 2 -->
+    <div class="step">
+      <div class="step-number">2</div>
+      <div class="step-content">
+        <div class="step-title">Cuire les pâtes al dente</div>
+        <div class="step-text">
+          Porter une grande casserole d'eau à ébullition. Saler généreusement. Cuire les spaghetti <strong>1 minute de moins</strong> que le temps indiqué sur le paquet — ils finiront de cuire en poêle.
+        </div>
+        <button class="timer-btn" onclick="startTimer(this, 480, 'Cuisson pâtes')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          8 min — Lancer le timer
+        </button>
+        <div class="timer-display" id="timer-0">
+          <div class="timer-time" id="time-0">8:00</div>
+          <div>
+            <div class="timer-label">CUISSON PÂTES</div>
+            <div class="timer-done" id="done-0">✦ PRÊT</div>
+          </div>
+        </div>
+        <div class="tip" style="margin-top:14px;">
+          <div class="tip-label">Important</div>
+          <p>Avant d'égoutter, <strong>prélever une louche d'eau de cuisson</strong>. C'est l'ingrédient secret : l'amidon crée l'onctuosité de la sauce.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Step 3 -->
+    <div class="step">
+      <div class="step-number">3</div>
+      <div class="step-content">
+        <div class="step-title">Faire revenir les pâtes</div>
+        <div class="step-text">
+          Égoutter les pâtes, les transférer dans une poêle à feu moyen. Faire revenir <strong>1 à 2 minutes</strong> pour finir la cuisson et légèrement les toaster.
+        </div>
+        <button class="timer-btn" onclick="startTimer(this, 90, 'Toaster les pâtes')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          1'30 — Lancer le timer
+        </button>
+        <div class="timer-display" id="timer-1">
+          <div class="timer-time" id="time-1">1:30</div>
+          <div>
+            <div class="timer-label">TOASTER LES PÂTES</div>
+            <div class="timer-done" id="done-1">✦ PRÊT</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Step 4 -->
+    <div class="step">
+      <div class="step-number">4</div>
+      <div class="step-content">
+        <div class="step-title">Lier la sauce — hors du feu</div>
+        <div class="step-text">
+          <strong>Retirer la poêle du feu</strong>. Attendre 30 secondes. Verser la sauce œufs-parmesan sur les pâtes, ajouter immédiatement une bonne quantité d'eau de cuisson. Mélanger rapidement et énergiquement. Si la sauce épaissit trop vite, ajouter un peu plus d'eau de cuisson.
+        </div>
+        <button class="timer-btn" onclick="startTimer(this, 30, 'Repos avant sauce')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          30 sec — Timer de repos
+        </button>
+        <div class="timer-display" id="timer-2">
+          <div class="timer-time" id="time-2">0:30</div>
+          <div>
+            <div class="timer-label">REPOS AVANT SAUCE</div>
+            <div class="timer-done" id="done-2">✦ AJOUTER LA SAUCE</div>
+          </div>
+        </div>
+        <div class="tip" style="margin-top:14px;">
+          <div class="tip-label">Le geste clé</div>
+          <p>Le feu est l'ennemi de la carbonara. Trop chaud = œufs brouillés. La chaleur résiduelle des pâtes suffit à cuire la sauce parfaitement.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Step 5 -->
+    <div class="step">
+      <div class="step-number">5</div>
+      <div class="step-content">
+        <div class="step-title">Dresser et servir</div>
+        <div class="step-text">
+          Dresser dans une assiette creuse chaude (passée sous l'eau chaude). Finir avec un <strong>généreux tour de poivre</strong> du moulin et quelques copeaux de parmesan. Servir immédiatement.
+        </div>
+        <div class="tip">
+          <div class="tip-label">Dressage</div>
+          <p>Une assiette froide fait figer la sauce instantanément. Toujours préchauffer le contenant.</p>
+        </div>
+      </div>
+    </div>
+
+  </section>
+
+  <div class="footer">✦ &nbsp; Buon appetito &nbsp; ✦</div>
+</div>
+
+<script>
+  let persons = 1;
+  const timers = {};
+
+  function changePerson(delta) {
+    persons = Math.max(1, Math.min(12, persons + delta));
+    document.getElementById('persons-count').textContent = persons;
+    document.getElementById('persons-unit').textContent = persons === 1 ? 'personne' : 'personnes';
+    document.getElementById('btn-minus').disabled = persons <= 1;
+    document.getElementById('btn-plus').disabled = persons >= 12;
+
+    document.querySelectorAll('.qty').forEach(el => {
+      const base = parseFloat(el.dataset.base);
+      const unit = el.dataset.unit;
+      const val = base * persons;
+      // Smart rounding
+      if (Number.isInteger(base)) {
+        el.textContent = val;
+      } else {
+        el.textContent = Math.round(val * 10) / 10;
+      }
+    });
+  }
+
+  function startTimer(btn, seconds, label) {
+    const idx = btn.parentElement.querySelectorAll('.timer-btn').length > 1
+      ? [...document.querySelectorAll('.timer-btn')].indexOf(btn)
+      : [...document.querySelectorAll('.timer-btn')].indexOf(btn);
+
+    const allBtns = document.querySelectorAll('.timer-btn');
+    const i = [...allBtns].indexOf(btn);
+    const displayEl = document.getElementById('timer-' + i);
+    const timeEl = document.getElementById('time-' + i);
+    const doneEl = document.getElementById('done-' + i);
+
+    if (timers[i]) {
+      clearInterval(timers[i]);
+      delete timers[i];
+      btn.classList.remove('running');
+      displayEl.classList.remove('active');
+      return;
+    }
+
+    let remaining = seconds;
+    displayEl.classList.add('active');
+    doneEl.style.display = 'none';
+    btn.classList.add('running');
+
+    function fmt(s) {
+      const m = Math.floor(s / 60);
+      const sec = s % 60;
+      return m + ':' + String(sec).padStart(2, '0');
+    }
+
+    timeEl.textContent = fmt(remaining);
+
+    timers[i] = setInterval(() => {
+      remaining--;
+      timeEl.textContent = fmt(remaining);
+      if (remaining <= 0) {
+        clearInterval(timers[i]);
+        delete timers[i];
+        btn.classList.remove('running');
+        doneEl.style.display = 'block';
+        // Vibrate if supported
+        if (navigator.vibrate) navigator.vibrate([200, 100, 200]);
+      }
+    }, 1000);
+  }
+</script>
+</body>
+</html>
