@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cake Pomme-Cannelle Protéiné</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=IM+Fell+English:ital@0;1&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --dark: #1a1208;
+    --gold: #c9a84c;
+    --gold-light: #e8c97a;
+    --cream: #f5f0e8;
+    --warm: #ede5d5;
+    --rust: #8b4a2b;
+    --text: #2c1f0e;
+    --muted: #7a6a55;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--cream);
+    font-family: 'Cormorant Garamond', serif;
+    color: var(--text);
+    min-height: 100vh;
+  }
+
+  /* HEADER */
+  .header {
+    background: var(--dark);
+    padding: 2.5rem 2rem 2rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .header::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(
+      45deg,
+      transparent,
+      transparent 40px,
+      rgba(201,168,76,0.03) 40px,
+      rgba(201,168,76,0.03) 41px
+    );
+  }
+  .header-border {
+    border: 1px solid var(--gold);
+    padding: 1.5rem 2rem;
+    position: relative;
+    display: inline-block;
+    min-width: 280px;
+  }
+  .header-border::before, .header-border::after {
+    content: '◆';
+    color: var(--gold);
+    font-size: 0.6rem;
+    position: absolute;
+    top: 50%; transform: translateY(-50%);
+  }
+  .header-border::before { left: -0.5rem; }
+  .header-border::after { right: -0.5rem; }
+
+  .badge {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 0.7rem;
+    letter-spacing: 0.25em;
+    color: var(--gold);
+    text-transform: uppercase;
+    margin-bottom: 0.6rem;
+  }
+  h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 2rem;
+    color: var(--cream);
+    font-weight: 700;
+    line-height: 1.15;
+    margin-bottom: 0.3rem;
+  }
+  h1 em {
+    color: var(--gold-light);
+    font-style: italic;
+  }
+  .subtitle {
+    font-size: 0.85rem;
+    color: var(--gold);
+    letter-spacing: 0.12em;
+    font-style: italic;
+  }
+
+  /* MACROS BAR */
+  .macros-bar {
+    background: var(--dark);
+    border-top: 1px solid rgba(201,168,76,0.3);
+    display: flex;
+    justify-content: center;
+    gap: 0;
+  }
+  .macro {
+    padding: 0.8rem 1.5rem;
+    text-align: center;
+    border-right: 1px solid rgba(201,168,76,0.2);
+    flex: 1;
+    max-width: 120px;
+  }
+  .macro:last-child { border-right: none; }
+  .macro-val {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.2rem;
+    color: var(--gold-light);
+    font-weight: 600;
+    display: block;
+  }
+  .macro-lbl {
+    font-size: 0.6rem;
+    color: var(--muted);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+  }
+
+  /* MAIN CONTENT */
+  .container {
+    max-width: 520px;
+    margin: 0 auto;
+    padding: 1.5rem 1.2rem 3rem;
+  }
+
+  /* SERVINGS */
+  .servings-block {
+    background: var(--dark);
+    border: 1px solid var(--gold);
+    padding: 1rem 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1.5rem;
+    position: relative;
+  }
+  .servings-block::before {
+    content: '◆';
+    color: var(--gold);
+    font-size: 0.5rem;
+    position: absolute;
+    top: -0.4rem; left: 50%; transform: translateX(-50%);
+    background: var(--dark);
+    padding: 0 0.3rem;
+  }
+  .servings-label {
+    font-family: 'Playfair Display', serif;
+    font-size: 0.85rem;
+    color: var(--cream);
+    letter-spacing: 0.1em;
+  }
+  .servings-label span {
+    color: var(--gold);
+    font-style: italic;
+  }
+  .servings-ctrl {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+  }
+  .s-btn {
+    width: 28px; height: 28px;
+    background: none;
+    border: 1px solid var(--gold);
+    color: var(--gold);
+    font-size: 1.1rem;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.2s;
+    font-family: 'Playfair Display', serif;
+  }
+  .s-btn:hover { background: var(--gold); color: var(--dark); }
+  .s-val {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.3rem;
+    color: var(--gold-light);
+    min-width: 1.5rem;
+    text-align: center;
+  }
+
+  /* DIVIDER */
+  .divider {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    margin: 1.4rem 0 1rem;
+  }
+  .divider-line {
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(to right, transparent, var(--gold), transparent);
+    border: none;
+  }
+  .divider-diamond {
+    color: var(--gold);
+    font-size: 0.55rem;
+    letter-spacing: 0.3em;
+  }
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.05rem;
+    color: var(--dark);
+    letter-spacing: 0.08em;
+    font-style: italic;
+    text-align: center;
+    margin-bottom: 1rem;
+  }
+
+  /* INGREDIENTS */
+  .ingredients-list {
+    list-style: none;
+  }
+  .ing-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding: 0.55rem 0;
+    border-bottom: 1px dashed rgba(122,106,85,0.3);
+    gap: 0.5rem;
+  }
+  .ing-item:last-child { border-bottom: none; }
+  .ing-name {
+    font-size: 1rem;
+    color: var(--text);
+    font-style: italic;
+  }
+  .ing-opt {
+    font-size: 0.75rem;
+    color: var(--muted);
+    font-style: normal;
+  }
+  .ing-amount {
+    font-family: 'Playfair Display', serif;
+    font-size: 0.95rem;
+    color: var(--rust);
+    font-weight: 600;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  /* STEPS */
+  .steps-list { list-style: none; }
+  .step-item {
+    display: flex;
+    gap: 1rem;
+    padding: 1rem 0;
+    border-bottom: 1px dashed rgba(122,106,85,0.25);
+    cursor: pointer;
+    transition: background 0.2s;
+    border-radius: 4px;
+    padding-left: 0.3rem;
+  }
+  .step-item:last-child { border-bottom: none; }
+  .step-item.done .step-text { opacity: 0.45; text-decoration: line-through; text-decoration-color: var(--gold); }
+  .step-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.5rem;
+    color: var(--gold);
+    line-height: 1;
+    min-width: 1.5rem;
+    font-style: italic;
+  }
+  .step-item.done .step-num { color: var(--muted); }
+  .step-text {
+    font-size: 1rem;
+    line-height: 1.55;
+    color: var(--text);
+    transition: opacity 0.3s;
+  }
+  .step-text strong {
+    color: var(--rust);
+    font-weight: 600;
+    font-style: normal;
+  }
+  .step-check {
+    margin-left: auto;
+    flex-shrink: 0;
+    width: 18px; height: 18px;
+    border: 1px solid var(--gold);
+    display: flex; align-items: center; justify-content: center;
+    color: var(--gold);
+    font-size: 0.7rem;
+    align-self: center;
+    transition: all 0.2s;
+  }
+  .step-item.done .step-check { background: var(--gold); color: var(--dark); }
+
+  /* INFO BOX */
+  .info-box {
+    background: var(--dark);
+    border-left: 3px solid var(--gold);
+    padding: 1rem 1.2rem;
+    margin-top: 1.5rem;
+  }
+  .info-box p {
+    font-size: 0.9rem;
+    color: var(--cream);
+    line-height: 1.6;
+    font-style: italic;
+  }
+  .info-box p + p { margin-top: 0.4rem; }
+  .info-box strong { color: var(--gold-light); font-style: normal; }
+
+  /* PROGRESS */
+  .progress-wrap {
+    margin: 1.2rem 0 0;
+    background: rgba(26,18,8,0.08);
+    height: 3px;
+    position: relative;
+  }
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(to right, var(--gold), var(--gold-light));
+    transition: width 0.4s ease;
+  }
+  .progress-label {
+    font-size: 0.7rem;
+    color: var(--muted);
+    letter-spacing: 0.1em;
+    text-align: right;
+    margin-top: 0.3rem;
+  }
+
+  @media (max-width: 400px) {
+    h1 { font-size: 1.6rem; }
+    .macro { padding: 0.6rem 0.8rem; }
+    .macro-val { font-size: 1rem; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-border">
+    <div class="badge">Recette du Chef · Sportif & Healthy</div>
+    <h1>Cake <em>Pomme</em><br>& Cannelle</h1>
+    <div class="subtitle">Protéiné · Sans chocolat · ~180 kcal / tranche</div>
+  </div>
+</div>
+
+<div class="macros-bar">
+  <div class="macro">
+    <span class="macro-val" id="m-kcal">180</span>
+    <span class="macro-lbl">kcal</span>
+  </div>
+  <div class="macro">
+    <span class="macro-val" id="m-prot">16g</span>
+    <span class="macro-lbl">protéines</span>
+  </div>
+  <div class="macro">
+    <span class="macro-val" id="m-slices">8</span>
+    <span class="macro-lbl">tranches</span>
+  </div>
+  <div class="macro">
+    <span class="macro-val">6j</span>
+    <span class="macro-lbl">frigo</span>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- SERVINGS -->
+  <div class="servings-block">
+    <div class="servings-label">Portions : <span id="srv-label">8 tranches</span></div>
+    <div class="servings-ctrl">
+      <button class="s-btn" onclick="changeServ(-1)">−</button>
+      <span class="s-val" id="srv-val">8</span>
+      <button class="s-btn" onclick="changeServ(1)">+</button>
+    </div>
+  </div>
+
+  <!-- INGRÉDIENTS -->
+  <div class="divider">
+    <div class="divider-line"></div>
+    <div class="divider-diamond">◆ ◆ ◆</div>
+    <div class="divider-line"></div>
+  </div>
+  <div class="section-title">— Ingrédients —</div>
+
+  <ul class="ingredients-list" id="ing-list">
+    <!-- populated by JS -->
+  </ul>
+
+  <!-- ÉTAPES -->
+  <div class="divider" style="margin-top:1.8rem">
+    <div class="divider-line"></div>
+    <div class="divider-diamond">◆ ◆ ◆</div>
+    <div class="divider-line"></div>
+  </div>
+  <div class="section-title">— Préparation —</div>
+
+  <div class="progress-wrap">
+    <div class="progress-fill" id="prog-fill" style="width:0%"></div>
+  </div>
+  <div class="progress-label" id="prog-label">0 / 6 étapes</div>
+
+  <ul class="steps-list" id="steps-list">
+    <!-- populated by JS -->
+  </ul>
+
+  <!-- NOTE CHEF -->
+  <div class="info-box">
+    <p>🍎 <strong>Astuce apprenti :</strong> râpe les pommes juste avant de les incorporer — elles rendraient trop d'eau si elles attendent.</p>
+    <p>🌡️ <strong>Conservation :</strong> filme le moule ou transfère en boîte hermétique, 5–6 jours au réfrigérateur. Sortir 10 min avant de déguster.</p>
+    <p>⚖️ <strong>Whey :</strong> toutes les marques n'ont pas la même absorption. Si la pâte semble trop épaisse, ajoute 1–2 c.à.s de lait.</p>
+  </div>
+
+</div>
+
+<script>
+  const BASE = 8;
+
+  // Ingrédients : [nom, quantité base, unité, optionnel]
+  const INGREDIENTS = [
+    { name: "Pommes moyennes râpées", base: 300, unit: "g", opt: false },
+    { name: "Œufs", base: 3, unit: null, opt: false },
+    { name: "Whey vanille", base: 60, unit: "g", opt: false },
+    { name: "Flocons d'avoine (mixés en farine)", base: 80, unit: "g", opt: false },
+    { name: "Yaourt grec nature", base: 125, unit: "g", opt: false },
+    { name: "Cannelle", base: 1, unit: "tsp", opt: false },
+    { name: "Levure chimique", base: 1, unit: "tsp", opt: false },
+    { name: "Sel fin", base: 1, unit: "pinch", opt: false },
+    { name: "Miel ou sirop d'érable", base: 1, unit: "tbsp", opt: true },
+  ];
+
+  const STEPS = [
+    { text: "Préchauffe le four à <strong>175°C</strong> et prépare ton moule à cake (beurré ou papier cuisson)." },
+    { text: "Mixe les <strong>flocons d'avoine</strong> en farine fine. Mélange-les avec la whey, la cannelle, la levure et le sel dans un saladier." },
+    { text: "Dans un autre bol, fouette les <strong>3 œufs</strong> avec le yaourt grec. Ajoute le miel si tu l'utilises." },
+    { text: "Râpe les <strong>pommes</strong> au dernier moment. Incorpore-les au mélange liquide." },
+    { text: "Verse les ingrédients liquides sur les secs. Mélange jusqu'à obtenir une pâte homogène, <strong>sans trop travailler</strong>." },
+    { text: "Verse dans le moule et enfourne <strong>35 à 40 minutes</strong>. La lame d'un couteau doit ressortir sèche. Laisse refroidir avant de démouler." },
+  ];
+
+  let servings = 8;
+  let doneSteps = new Set();
+
+  const spoonUnits = ['tsp', 'tbsp', 'pinch'];
+  const unitLabels = { tsp: 'c.à.c', tbsp: 'c.à.s', pinch: 'pincée', g: 'g', ml: 'ml', l: 'l', kg: 'kg' };
+
+  function formatAmount(base, unit, ratio) {
+    if (spoonUnits.includes(unit)) {
+      // Don't scale spoon measures proportionally for display — keep as ratio
+      const val = base * ratio;
+      const label = unitLabels[unit];
+      // round to nearest 0.5 for spoons
+      const r = Math.round(val * 2) / 2;
+      return r + ' ' + label;
+    }
+    const val = Math.round(base * ratio);
+    if (unit === null) return val + (val > 1 && base > 1 ? '' : '');
+    return val + ' ' + (unitLabels[unit] || unit);
+  }
+
+  function renderIngredients() {
+    const ratio = servings / BASE;
+    const list = document.getElementById('ing-list');
+    list.innerHTML = INGREDIENTS.map(ing => `
+      <li class="ing-item">
+        <span class="ing-name">${ing.name}${ing.opt ? ' <span class="ing-opt">(optionnel)</span>' : ''}</span>
+        <span class="ing-amount">${formatAmount(ing.base, ing.unit, ratio)}</span>
+      </li>
+    `).join('');
+  }
+
+  function renderSteps() {
+    const list = document.getElementById('steps-list');
+    list.innerHTML = STEPS.map((s, i) => `
+      <li class="step-item${doneSteps.has(i) ? ' done' : ''}" onclick="toggleStep(${i})">
+        <span class="step-num">${i+1}</span>
+        <span class="step-text">${s.text}</span>
+        <span class="step-check">${doneSteps.has(i) ? '✓' : ''}</span>
+      </li>
+    `).join('');
+    updateProgress();
+  }
+
+  function updateProgress() {
+    const pct = Math.round((doneSteps.size / STEPS.length) * 100);
+    document.getElementById('prog-fill').style.width = pct + '%';
+    document.getElementById('prog-label').textContent = doneSteps.size + ' / ' + STEPS.length + ' étapes';
+  }
+
+  function updateMacros() {
+    document.getElementById('m-slices').textContent = servings;
+  }
+
+  function toggleStep(i) {
+    if (doneSteps.has(i)) doneSteps.delete(i);
+    else doneSteps.add(i);
+    renderSteps();
+  }
+
+  function changeServ(delta) {
+    servings = Math.max(2, Math.min(24, servings + delta));
+    document.getElementById('srv-val').textContent = servings;
+    document.getElementById('srv-label').textContent = servings + ' tranches';
+    renderIngredients();
+    updateMacros();
+  }
+
+  renderIngredients();
+  renderSteps();
+</script>
+</body>
+</html>
