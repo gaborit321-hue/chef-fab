@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Œufs Cocotte Lardons-Oignons</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cream: #f5f0e8;
+    --dark: #1a1612;
+    --gold: #c9a84c;
+    --gold-light: #e8d5a3;
+    --brown: #3d2b1f;
+    --rust: #8b3a2a;
+    --text: #2c1f14;
+    --muted: #7a6a58;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background-color: var(--dark);
+    font-family: 'DM Sans', sans-serif;
+    color: var(--text);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem 1rem;
+    background-image: 
+      radial-gradient(ellipse at 20% 20%, #2d1f14 0%, transparent 60%),
+      radial-gradient(ellipse at 80% 80%, #1a1008 0%, transparent 60%);
+  }
+
+  .card {
+    background: var(--cream);
+    max-width: 600px;
+    width: 100%;
+    border-radius: 2px;
+    overflow: hidden;
+    box-shadow: 0 30px 80px rgba(0,0,0,0.6);
+    position: relative;
+  }
+
+  /* Header */
+  .header {
+    background: var(--brown);
+    padding: 2.5rem 2.5rem 2rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .header::before {
+    content: '';
+    position: absolute;
+    top: -40px; right: -40px;
+    width: 180px; height: 180px;
+    border-radius: 50%;
+    background: rgba(201,168,76,0.08);
+  }
+  .header::after {
+    content: '';
+    position: absolute;
+    bottom: -20px; left: 30%;
+    width: 100px; height: 100px;
+    border-radius: 50%;
+    background: rgba(201,168,76,0.05);
+  }
+
+  .header-label {
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 500;
+    font-size: 0.7rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 0.6rem;
+  }
+
+  .header h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.2rem;
+    color: var(--cream);
+    line-height: 1.15;
+    font-weight: 400;
+  }
+
+  .header h1 em {
+    color: var(--gold);
+    font-style: italic;
+  }
+
+  .header-meta {
+    margin-top: 1rem;
+    display: flex;
+    gap: 1.5rem;
+    font-size: 0.78rem;
+    color: var(--gold-light);
+    font-weight: 300;
+    letter-spacing: 0.05em;
+  }
+
+  .gold-line {
+    height: 3px;
+    background: linear-gradient(90deg, var(--gold), transparent);
+  }
+
+  /* Portions slider */
+  .portions-section {
+    padding: 1.8rem 2.5rem;
+    background: #ede8de;
+    border-bottom: 1px solid #d9d0be;
+  }
+
+  .portions-label {
+    font-size: 0.7rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+    font-weight: 500;
+    margin-bottom: 1rem;
+  }
+
+  .portions-control {
+    display: flex;
+    align-items: center;
+    gap: 1.2rem;
+  }
+
+  .portions-btn {
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    border: 2px solid var(--gold);
+    background: transparent;
+    color: var(--gold);
+    font-size: 1.2rem;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.2s;
+    font-family: 'DM Sans', sans-serif;
+    flex-shrink: 0;
+  }
+  .portions-btn:hover { background: var(--gold); color: white; }
+
+  .portions-display {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.6rem;
+    color: var(--brown);
+    min-width: 2rem;
+    text-align: center;
+  }
+
+  .portions-sub {
+    font-size: 0.8rem;
+    color: var(--muted);
+    font-weight: 300;
+  }
+
+  /* Ingredients */
+  .section {
+    padding: 1.8rem 2.5rem;
+    border-bottom: 1px solid #d9d0be;
+  }
+
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--brown);
+    letter-spacing: 0.03em;
+    margin-bottom: 1.2rem;
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+  }
+  .section-title::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--gold-light);
+  }
+
+  .ingredient-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding: 0.45rem 0;
+    border-bottom: 1px dotted #d9cfc0;
+    font-size: 0.88rem;
+  }
+  .ingredient-row:last-child { border-bottom: none; }
+
+  .ing-name { color: var(--text); font-weight: 400; }
+  .ing-qty {
+    font-weight: 500;
+    color: var(--rust);
+    font-family: 'Playfair Display', serif;
+    font-size: 0.95rem;
+    min-width: 80px;
+    text-align: right;
+  }
+
+  /* Steps */
+  .steps-list { list-style: none; }
+
+  .step {
+    display: flex;
+    gap: 1.1rem;
+    padding: 0.9rem 0;
+    border-bottom: 1px solid #e8e0d0;
+  }
+  .step:last-child { border-bottom: none; }
+
+  .step-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.4rem;
+    color: var(--gold);
+    font-weight: 700;
+    line-height: 1;
+    flex-shrink: 0;
+    width: 1.6rem;
+    text-align: center;
+    padding-top: 2px;
+  }
+
+  .step-content { font-size: 0.875rem; line-height: 1.65; color: var(--text); }
+  .step-content strong { color: var(--brown); font-weight: 500; }
+
+  /* Tip */
+  .tip {
+    margin: 0.6rem 0 0;
+    padding: 0.6rem 0.9rem;
+    background: #f0e8d5;
+    border-left: 3px solid var(--gold);
+    font-size: 0.8rem;
+    color: var(--muted);
+    font-style: italic;
+    line-height: 1.5;
+    border-radius: 0 2px 2px 0;
+  }
+
+  /* Air fryer table */
+  .airfryer-block {
+    background: var(--brown);
+    border-radius: 4px;
+    overflow: hidden;
+    margin-top: 0.8rem;
+  }
+
+  .airfryer-title {
+    padding: 0.6rem 1rem;
+    font-size: 0.68rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--gold);
+    font-weight: 500;
+    background: rgba(0,0,0,0.2);
+  }
+
+  .airfryer-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1px;
+    background: rgba(255,255,255,0.08);
+  }
+
+  .af-cell {
+    padding: 0.7rem 1rem;
+    background: var(--brown);
+  }
+  .af-cell-label {
+    font-size: 0.65rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--gold-light);
+    opacity: 0.7;
+    margin-bottom: 0.2rem;
+  }
+  .af-cell-value {
+    font-family: 'Playfair Display', serif;
+    font-size: 1rem;
+    color: var(--cream);
+    font-weight: 400;
+  }
+
+  .af-warning {
+    padding: 0.5rem 1rem;
+    font-size: 0.72rem;
+    color: var(--gold-light);
+    opacity: 0.75;
+    font-style: italic;
+  }
+
+  /* Footer */
+  .footer {
+    padding: 1.2rem 2.5rem;
+    background: var(--brown);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+  }
+  .footer-text {
+    font-family: 'Playfair Display', serif;
+    font-size: 0.8rem;
+    color: var(--gold-light);
+    font-style: italic;
+    opacity: 0.8;
+    text-align: center;
+  }
+</style>
+</head>
+<body>
+
+<div class="card">
+
+  <div class="header">
+    <div class="header-label">Recette du Chef</div>
+    <h1>Œufs Cocotte<br><em>Lardons & Oignons</em></h1>
+    <div class="header-meta">
+      <span>🥚 Entrée</span>
+      <span>⏱ ~30 minutes</span>
+      <span>🌡 Air fryer · BAKE</span>
+    </div>
+  </div>
+  <div class="gold-line"></div>
+
+  <!-- Portions -->
+  <div class="portions-section">
+    <div class="portions-label">Nombre de personnes</div>
+    <div class="portions-control">
+      <button class="portions-btn" onclick="changePortion(-1)">−</button>
+      <div class="portions-display" id="portionNum">2</div>
+      <button class="portions-btn" onclick="changePortion(1)">+</button>
+      <div class="portions-sub" id="portionSub">4 ramequins · 4 œufs</div>
+    </div>
+  </div>
+
+  <!-- Ingrédients -->
+  <div class="section">
+    <div class="section-title">Ingrédients</div>
+    <div class="ingredient-row">
+      <span class="ing-name">Œufs frais</span>
+      <span class="ing-qty" id="qty-oeufs">4</span>
+    </div>
+    <div class="ingredient-row">
+      <span class="ing-name">Crème fraîche épaisse</span>
+      <span class="ing-qty" id="qty-creme">120 ml</span>
+    </div>
+    <div class="ingredient-row">
+      <span class="ing-name">Lardons fumés</span>
+      <span class="ing-qty" id="qty-lardons">125 g</span>
+    </div>
+    <div class="ingredient-row">
+      <span class="ing-name">Oignon</span>
+      <span class="ing-qty" id="qty-oignon">1</span>
+    </div>
+    <div class="ingredient-row">
+      <span class="ing-name">Emmental râpé</span>
+      <span class="ing-qty">QS</span>
+    </div>
+    <div class="ingredient-row">
+      <span class="ing-name">Beurre (ramequins)</span>
+      <span class="ing-qty">QS</span>
+    </div>
+    <div class="ingredient-row">
+      <span class="ing-name">Poivre</span>
+      <span class="ing-qty">QS</span>
+    </div>
+  </div>
+
+  <!-- Étapes -->
+  <div class="section">
+    <div class="section-title">Préparation</div>
+    <ol class="steps-list">
+
+      <li class="step">
+        <div class="step-num">1</div>
+        <div class="step-content">
+          <strong>La garniture.</strong> Émince finement l'oignon. Fais revenir les lardons à sec dans une poêle à feu moyen pendant <strong>3 minutes</strong>, puis ajoute l'oignon. Fais compoter <strong>5 à 7 minutes</strong> jusqu'à bien doré et fondant. Laisse tiédir.
+          <div class="tip">⚠️ Pas de sel — les lardons sont déjà bien salés.</div>
+        </div>
+      </li>
+
+      <li class="step">
+        <div class="step-num">2</div>
+        <div class="step-content">
+          <strong>Monte les ramequins.</strong> Beurre chaque ramequin. Dépose une belle cuillère de lardons-oignons au fond, puis verse <strong>30 ml de crème fraîche</strong>. Casse un œuf délicatement — <strong>le jaune doit rester intact</strong>. Poivre, puis une pincée d'emmental râpé sur le dessus.
+        </div>
+      </li>
+
+      <li class="step">
+        <div class="step-num">3</div>
+        <div class="step-content">
+          <strong>Cuisson air fryer.</strong>
+          <div class="airfryer-block">
+            <div class="airfryer-title">✦ Réglages Air Fryer</div>
+            <div class="airfryer-grid">
+              <div class="af-cell">
+                <div class="af-cell-label">Programme</div>
+                <div class="af-cell-value">BAKE</div>
+              </div>
+              <div class="af-cell">
+                <div class="af-cell-label">Température</div>
+                <div class="af-cell-value">150 °C</div>
+              </div>
+              <div class="af-cell">
+                <div class="af-cell-label">Départ</div>
+                <div class="af-cell-value">À froid</div>
+              </div>
+              <div class="af-cell">
+                <div class="af-cell-label">Durée</div>
+                <div class="af-cell-value">18 min</div>
+              </div>
+            </div>
+            <div class="af-warning">⚠️ Vérifier à 16 min — blanc pris, jaune encore tremblotant. Si l'appareil est déjà chaud : 10–12 min seulement.</div>
+          </div>
+        </div>
+      </li>
+
+      <li class="step">
+        <div class="step-num">4</div>
+        <div class="step-content">
+          <strong>Service immédiat.</strong> Pose chaque ramequin sur une petite assiette avec un torchon plié dessous. Sers avec des <strong>mouillettes de pain grillé</strong>. L'œuf cocotte n'attend pas !
+          <div class="tip">💡 Le jaune doit couler légèrement quand on plonge la mouillette — c'est le signe d'une cuisson parfaite.</div>
+        </div>
+      </li>
+
+    </ol>
+  </div>
+
+  <div class="footer">
+    <div class="footer-text">« Un jaune trop ferme, c'est raté. »</div>
+  </div>
+
+</div>
+
+<script>
+  let portions = 4; // base = 4 personnes = 4 ramequins (1 ramequin par personne)
+
+  const base = {
+    oeufs: 4,      // 1 par personne
+    creme: 120,    // 30 ml par personne
+    lardons: 125,  // pour 4 personnes
+    oignon: 1      // pour 4 personnes
+  };
+
+  function fmt(val, unit) {
+    const rounded = Math.round(val);
+    if (unit === 'ml') return rounded + ' ml';
+    if (unit === 'g') return rounded + ' g';
+    return rounded.toString();
+  }
+
+  function update() {
+    const ratio = portions / 4;
+
+    document.getElementById('portionNum').textContent = portions;
+    document.getElementById('portionSub').textContent = portions + ' ramequin' + (portions > 1 ? 's' : '') + ' · ' + portions + ' œuf' + (portions > 1 ? 's' : '');
+
+    document.getElementById('qty-oeufs').textContent = fmt(base.oeufs * ratio, '');
+    document.getElementById('qty-creme').textContent = fmt(base.creme * ratio, 'ml');
+    document.getElementById('qty-lardons').textContent = fmt(base.lardons * ratio, 'g');
+
+    const oignonVal = base.oignon * ratio;
+    if (oignonVal <= 0.7) {
+      document.getElementById('qty-oignon').textContent = '½';
+    } else if (oignonVal <= 1.4) {
+      document.getElementById('qty-oignon').textContent = '1';
+    } else if (oignonVal <= 2.2) {
+      document.getElementById('qty-oignon').textContent = '2';
+    } else {
+      document.getElementById('qty-oignon').textContent = Math.round(oignonVal).toString();
+    }
+  }
+
+  function changePortion(delta) {
+    if (portions + delta < 1) return;
+    if (portions + delta > 10) return;
+    portions += delta;
+    update();
+  }
+
+  update();
+</script>
+</body>
+</html>

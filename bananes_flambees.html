@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bananes Flambées</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #1a1208;
+    --card: #221a0e;
+    --gold: #c9953a;
+    --gold-light: #e8b96a;
+    --gold-pale: #f5e4c0;
+    --cream: #f2e8d5;
+    --muted: #8a7560;
+    --border: #3a2e1e;
+    --flame: #e05a1a;
+    --step-bg: #2a1f10;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--cream);
+    font-family: 'DM Sans', sans-serif;
+    min-height: 100vh;
+    padding: 2rem 1rem 4rem;
+  }
+
+  /* Flame animation in header */
+  @keyframes flicker {
+    0%,100% { transform: scaleY(1) scaleX(1); opacity: 1; }
+    25% { transform: scaleY(1.08) scaleX(0.95); opacity: 0.9; }
+    50% { transform: scaleY(0.95) scaleX(1.05); opacity: 1; }
+    75% { transform: scaleY(1.05) scaleX(0.97); opacity: 0.95; }
+  }
+  @keyframes glow {
+    0%,100% { text-shadow: 0 0 20px rgba(201,149,58,0.4), 0 0 40px rgba(201,149,58,0.2); }
+    50% { text-shadow: 0 0 30px rgba(201,149,58,0.7), 0 0 60px rgba(201,149,58,0.3); }
+  }
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(18px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .wrapper {
+    max-width: 680px;
+    margin: 0 auto;
+  }
+
+  /* HEADER */
+  header {
+    text-align: center;
+    padding: 2.5rem 1rem 2rem;
+    animation: fadeUp 0.7s ease both;
+  }
+
+  .flame-icon {
+    font-size: 2.8rem;
+    display: inline-block;
+    animation: flicker 1.8s ease-in-out infinite;
+    margin-bottom: 0.5rem;
+  }
+
+  h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2rem, 6vw, 3rem);
+    font-weight: 700;
+    color: var(--gold-light);
+    letter-spacing: 0.02em;
+    animation: glow 3s ease-in-out infinite;
+    line-height: 1.1;
+  }
+
+  .subtitle {
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    color: var(--muted);
+    font-size: 1rem;
+    margin-top: 0.5rem;
+    letter-spacing: 0.05em;
+  }
+
+  .divider {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin: 1.5rem 0;
+  }
+  .divider::before, .divider::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(to right, transparent, var(--border), var(--gold), var(--border), transparent);
+  }
+  .divider-diamond {
+    color: var(--gold);
+    font-size: 0.6rem;
+  }
+
+  /* PORTIONS CONTROL */
+  .portions-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.4rem 1.8rem;
+    margin-bottom: 1.5rem;
+    animation: fadeUp 0.7s ease 0.1s both;
+  }
+
+  .portions-label {
+    font-family: 'Playfair Display', serif;
+    font-size: 0.8rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 1rem;
+  }
+
+  .portions-control {
+    display: flex;
+    align-items: center;
+    gap: 1.2rem;
+  }
+
+  .btn-portion {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    border: 1.5px solid var(--gold);
+    background: transparent;
+    color: var(--gold);
+    font-size: 1.3rem;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.2s;
+    flex-shrink: 0;
+    font-family: 'DM Sans', sans-serif;
+    line-height: 1;
+  }
+  .btn-portion:hover {
+    background: var(--gold);
+    color: var(--bg);
+  }
+
+  .portions-display {
+    flex: 1;
+  }
+
+  .portions-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.2rem;
+    font-weight: 700;
+    color: var(--gold-light);
+    display: block;
+    line-height: 1;
+  }
+
+  .portions-text {
+    font-size: 0.8rem;
+    color: var(--muted);
+    margin-top: 0.1rem;
+  }
+
+  .portions-slider {
+    flex: 2;
+    -webkit-appearance: none;
+    height: 3px;
+    border-radius: 2px;
+    background: var(--border);
+    outline: none;
+    cursor: pointer;
+  }
+  .portions-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: var(--gold);
+    cursor: pointer;
+    border: 2px solid var(--bg);
+    box-shadow: 0 0 8px rgba(201,149,58,0.5);
+  }
+
+  /* INGREDIENTS */
+  .section-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.6rem 1.8rem;
+    margin-bottom: 1.5rem;
+    animation: fadeUp 0.7s ease 0.2s both;
+  }
+
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 0.75rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 1.2rem;
+  }
+
+  .ingredient-row {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    padding: 0.6rem 0;
+    border-bottom: 1px solid var(--border);
+    gap: 1rem;
+  }
+  .ingredient-row:last-child { border-bottom: none; }
+
+  .ing-name {
+    font-size: 0.95rem;
+    color: var(--cream);
+    font-weight: 400;
+  }
+
+  .ing-qty {
+    font-family: 'Playfair Display', serif;
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--gold-light);
+    white-space: nowrap;
+    transition: all 0.3s ease;
+  }
+
+  .ing-qty.updated {
+    animation: pulse 0.3s ease;
+  }
+  @keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.15); color: var(--flame); }
+    100% { transform: scale(1); }
+  }
+
+  /* STEPS */
+  .steps-card {
+    animation: fadeUp 0.7s ease 0.3s both;
+  }
+
+  .step {
+    display: flex;
+    gap: 1.2rem;
+    background: var(--step-bg);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 1.2rem 1.4rem;
+    margin-bottom: 0.9rem;
+    transition: border-color 0.2s;
+    cursor: pointer;
+  }
+  .step:hover { border-color: var(--gold); }
+  .step.done { opacity: 0.45; }
+  .step.done .step-num { background: var(--muted); }
+
+  .step-num {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: var(--gold);
+    color: var(--bg);
+    font-family: 'Playfair Display', serif;
+    font-weight: 700;
+    font-size: 0.85rem;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    margin-top: 1px;
+    transition: background 0.2s;
+  }
+
+  .step-content {}
+  .step-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--gold-pale);
+    margin-bottom: 0.3rem;
+  }
+  .step-desc {
+    font-size: 0.88rem;
+    color: var(--muted);
+    line-height: 1.6;
+  }
+  .step-desc strong { color: var(--cream); font-weight: 500; }
+
+  /* WARNING BOX */
+  .warning {
+    background: rgba(224,90,26,0.1);
+    border: 1px solid rgba(224,90,26,0.35);
+    border-radius: 8px;
+    padding: 0.8rem 1.1rem;
+    font-size: 0.82rem;
+    color: #f09060;
+    margin-bottom: 0.9rem;
+    display: flex;
+    gap: 0.6rem;
+    align-items: flex-start;
+  }
+
+  /* TIP */
+  .tip-box {
+    background: rgba(201,149,58,0.07);
+    border-left: 3px solid var(--gold);
+    border-radius: 0 8px 8px 0;
+    padding: 1rem 1.2rem;
+    margin-top: 1.5rem;
+    font-size: 0.87rem;
+    color: var(--muted);
+    line-height: 1.6;
+    animation: fadeUp 0.7s ease 0.4s both;
+  }
+  .tip-box strong { color: var(--gold-light); }
+
+  /* RESET */
+  .reset-btn {
+    display: block;
+    margin: 1.5rem auto 0;
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--muted);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.8rem;
+    letter-spacing: 0.1em;
+    padding: 0.5rem 1.2rem;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .reset-btn:hover { border-color: var(--gold); color: var(--gold); }
+</style>
+</head>
+<body>
+<div class="wrapper">
+
+  <header>
+    <div class="flame-icon">🔥</div>
+    <h1>Bananes Flambées</h1>
+    <p class="subtitle">Caramel, beurre & rhum — un classique de bistrot</p>
+  </header>
+
+  <div class="divider"><span class="divider-diamond">◆</span></div>
+
+  <!-- PORTIONS -->
+  <div class="portions-card">
+    <div class="portions-label">Portions</div>
+    <div class="portions-control">
+      <button class="btn-portion" id="btn-minus">−</button>
+      <div class="portions-display">
+        <span class="portions-num" id="portions-num">2</span>
+        <div class="portions-text" id="portions-text">personnes</div>
+      </div>
+      <input type="range" class="portions-slider" id="slider" min="1" max="10" value="2">
+      <button class="btn-portion" id="btn-plus">+</button>
+    </div>
+  </div>
+
+  <!-- INGREDIENTS -->
+  <div class="section-card">
+    <div class="section-title">Ingrédients</div>
+
+    <div class="ingredient-row">
+      <span class="ing-name">Bananes mûres</span>
+      <span class="ing-qty" id="ing-bananes">2</span>
+    </div>
+    <div class="ingredient-row">
+      <span class="ing-name">Beurre</span>
+      <span class="ing-qty" id="ing-beurre">30 g</span>
+    </div>
+    <div class="ingredient-row">
+      <span class="ing-name">Sucre roux</span>
+      <span class="ing-qty" id="ing-sucre">30 g</span>
+    </div>
+    <div class="ingredient-row">
+      <span class="ing-name">Rhum brun <em style="font-size:0.78rem;color:var(--muted)">(min. 40%)</em></span>
+      <span class="ing-qty" id="ing-rhum">40 ml</span>
+    </div>
+    <div class="ingredient-row">
+      <span class="ing-name">Cannelle <em style="font-size:0.78rem;color:var(--muted)">(facultatif)</em></span>
+      <span class="ing-qty" id="ing-cannelle">1 pincée</span>
+    </div>
+  </div>
+
+  <!-- STEPS -->
+  <div class="steps-card">
+    <div class="section-title" style="padding: 0 0.2rem 1rem; font-family:'Playfair Display',serif; font-size:0.75rem; letter-spacing:0.18em; text-transform:uppercase; color:var(--gold);">
+      Préparation — cliquez sur chaque étape pour la cocher
+    </div>
+
+    <div class="step" onclick="toggleStep(this)">
+      <div class="step-num">1</div>
+      <div class="step-content">
+        <div class="step-title">Prépare les bananes</div>
+        <div class="step-desc">Épluche-les et coupe-les <strong>en deux dans la longueur</strong>. Pose-les à portée de main — la suite va vite.</div>
+      </div>
+    </div>
+
+    <div class="step" onclick="toggleStep(this)">
+      <div class="step-num">2</div>
+      <div class="step-content">
+        <div class="step-title">Fais fondre le beurre</div>
+        <div class="step-desc">Dans une poêle à <strong>feu moyen</strong>, fais fondre le beurre jusqu'à ce qu'il mousse légèrement. Pas de beurre brûlé !</div>
+      </div>
+    </div>
+
+    <div class="step" onclick="toggleStep(this)">
+      <div class="step-num">3</div>
+      <div class="step-content">
+        <div class="step-title">Caramelise le sucre</div>
+        <div class="step-desc">Verse le sucre roux dans le beurre fondu. Mélange doucement — tu obtiens un <strong>caramel blond</strong> en 1 à 2 minutes.</div>
+      </div>
+    </div>
+
+    <div class="step" onclick="toggleStep(this)">
+      <div class="step-num">4</div>
+      <div class="step-content">
+        <div class="step-title">Saisis les bananes</div>
+        <div class="step-desc">Dépose les bananes <strong>côté coupé vers le bas</strong>. Laisse caraméliser <strong>2 min sans toucher</strong>, puis retourne délicatement. Encore <strong>1 à 2 min</strong> côté arrondi.</div>
+      </div>
+    </div>
+
+    <div class="warning">
+      ⚠️ <span>Avant le flambage : <strong>baisse le feu, éteins la hotte</strong>. Mesure le rhum dans un verre à l'avance — ne verse jamais depuis la bouteille.</span>
+    </div>
+
+    <div class="step" onclick="toggleStep(this)">
+      <div class="step-num">5</div>
+      <div class="step-content">
+        <div class="step-title">Flambage 🔥</div>
+        <div class="step-desc">La poêle reste sur <strong>feu doux</strong>. Verse le rhum, puis approche une longue allumette pour enflammer. Les flammes s'éteignent seules en <strong>20-30 secondes</strong>.</div>
+      </div>
+    </div>
+
+    <div class="step" onclick="toggleStep(this)">
+      <div class="step-num">6</div>
+      <div class="step-content">
+        <div class="step-title">Réduis la sauce</div>
+        <div class="step-desc">Après l'extinction des flammes, <strong>1 à 2 min à feu doux</strong> pour réduire. La sauce doit napper les bananes comme un sirop épais et brillant.</div>
+      </div>
+    </div>
+
+    <div class="step" onclick="toggleStep(this)">
+      <div class="step-num">7</div>
+      <div class="step-content">
+        <div class="step-title">Dresse et sers</div>
+        <div class="step-desc">Nape de sauce caramel-rhum, saupoudre de cannelle. <strong>Sers immédiatement</strong> — les bananes flambées n'attendent pas !</div>
+      </div>
+    </div>
+
+    <button class="reset-btn" onclick="resetSteps()">↺ Recommencer</button>
+  </div>
+
+  <div class="tip-box">
+    <strong>💡 Conseil du chef :</strong> Une boule de glace vanille à côté, c'est le mariage parfait. Et rappelle-toi — le <strong>rhum de cuisine</strong> ne flambe pas ! Il faut un rhum brun à <strong>minimum 40%</strong> (Negrita, Havana Club, Bacardi...).
+  </div>
+
+</div>
+
+<script>
+  const BASE = 2;
+
+  const ingredients = {
+    'ing-bananes': { val: 2, unit: '', type: 'count' },
+    'ing-beurre':  { val: 30, unit: 'g', type: 'weight' },
+    'ing-sucre':   { val: 30, unit: 'g', type: 'weight' },
+    'ing-rhum':    { val: 40, unit: 'ml', type: 'volume' },
+    'ing-cannelle':{ val: 1, unit: 'pincée', type: 'pinch' },
+  };
+
+  function scale(portions) {
+    const ratio = portions / BASE;
+    Object.entries(ingredients).forEach(([id, ing]) => {
+      const el = document.getElementById(id);
+      if (!el) return;
+      let raw = ing.val * ratio;
+      let display;
+
+      if (ing.type === 'pinch') {
+        const pinches = Math.round(raw);
+        display = pinches <= 1 ? '1 pincée' : `${pinches} pincées`;
+      } else if (ing.type === 'count') {
+        display = Math.round(raw).toString();
+      } else {
+        display = `${Math.round(raw)} ${ing.unit}`;
+      }
+
+      el.textContent = display;
+      el.classList.remove('updated');
+      void el.offsetWidth;
+      el.classList.add('updated');
+    });
+
+    document.getElementById('portions-num').textContent = portions;
+    document.getElementById('portions-text').textContent = portions === 1 ? 'personne' : 'personnes';
+  }
+
+  let portions = 2;
+  const slider = document.getElementById('slider');
+
+  document.getElementById('btn-minus').onclick = () => {
+    if (portions > 1) { portions--; slider.value = portions; scale(portions); }
+  };
+  document.getElementById('btn-plus').onclick = () => {
+    if (portions < 10) { portions++; slider.value = portions; scale(portions); }
+  };
+  slider.oninput = () => { portions = parseInt(slider.value); scale(portions); };
+
+  function toggleStep(el) {
+    el.classList.toggle('done');
+  }
+
+  function resetSteps() {
+    document.querySelectorAll('.step.done').forEach(s => s.classList.remove('done'));
+  }
+</script>
+</body>
+</html>

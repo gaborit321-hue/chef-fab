@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Poulet Miel-Moutarde</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cream: #f5f0e8;
+    --dark: #1a1a18;
+    --gold: #c8973a;
+    --gold-light: #e8b85a;
+    --brown: #6b4c2a;
+    --warm-gray: #8a8070;
+    --card-bg: #faf7f2;
+    --border: #e0d8cc;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background-color: var(--cream);
+    color: var(--dark);
+    font-family: 'DM Sans', sans-serif;
+    min-height: 100vh;
+    padding: 40px 20px;
+  }
+
+  .page {
+    max-width: 680px;
+    margin: 0 auto;
+  }
+
+  /* HEADER */
+  .header {
+    background: var(--dark);
+    color: var(--cream);
+    padding: 36px 40px 28px;
+    border-radius: 4px 4px 0 0;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .header::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: repeating-linear-gradient(
+      45deg,
+      transparent,
+      transparent 40px,
+      rgba(200,151,58,0.04) 40px,
+      rgba(200,151,58,0.04) 80px
+    );
+  }
+
+  .header-label {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 10px;
+  }
+
+  .header h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 38px;
+    font-weight: 700;
+    line-height: 1.1;
+    margin-bottom: 6px;
+  }
+
+  .header-sub {
+    font-size: 13px;
+    color: var(--warm-gray);
+    font-style: italic;
+    font-family: 'Playfair Display', serif;
+  }
+
+  .gold-bar {
+    height: 3px;
+    background: linear-gradient(90deg, var(--gold), var(--gold-light), var(--gold));
+  }
+
+  /* PORTIONS CONTROL */
+  .portions-block {
+    background: var(--dark);
+    padding: 18px 40px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    border-top: 1px solid #2a2a28;
+  }
+
+  .portions-label {
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--warm-gray);
+    flex: 1;
+  }
+
+  .portions-controls {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+
+  .btn-portion {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    border: 1px solid var(--gold);
+    background: transparent;
+    color: var(--gold);
+    font-size: 18px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+    line-height: 1;
+    padding-bottom: 1px;
+  }
+
+  .btn-portion:hover {
+    background: var(--gold);
+    color: var(--dark);
+  }
+
+  .portions-value {
+    font-family: 'Playfair Display', serif;
+    font-size: 26px;
+    color: var(--cream);
+    min-width: 30px;
+    text-align: center;
+  }
+
+  .portions-unit {
+    font-size: 11px;
+    color: var(--warm-gray);
+    letter-spacing: 1px;
+  }
+
+  /* BODY */
+  .body {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-top: none;
+    padding: 36px 40px;
+    border-radius: 0 0 4px 4px;
+  }
+
+  /* SECTION TITLE */
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--dark);
+    margin-bottom: 16px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .section-title::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, var(--border), transparent);
+  }
+
+  .section-num {
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--gold);
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 500;
+  }
+
+  /* INGREDIENTS */
+  .ingredients {
+    margin-bottom: 36px;
+  }
+
+  .ingredient-row {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    padding: 9px 0;
+    border-bottom: 1px dashed var(--border);
+    gap: 10px;
+  }
+
+  .ingredient-row:last-child {
+    border-bottom: none;
+  }
+
+  .ing-name {
+    font-size: 14px;
+    color: var(--dark);
+    flex: 1;
+  }
+
+  .ing-note {
+    font-size: 12px;
+    color: var(--warm-gray);
+    font-style: italic;
+    margin-top: 1px;
+  }
+
+  .ing-qty {
+    font-family: 'Playfair Display', serif;
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--gold);
+    white-space: nowrap;
+    min-width: 70px;
+    text-align: right;
+  }
+
+  .ing-unit {
+    font-size: 11px;
+    color: var(--warm-gray);
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 400;
+  }
+
+  /* STEPS */
+  .steps {
+    margin-bottom: 0;
+  }
+
+  .step {
+    display: flex;
+    gap: 18px;
+    margin-bottom: 20px;
+    cursor: pointer;
+  }
+
+  .step:last-child { margin-bottom: 0; }
+
+  .step-num {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: var(--dark);
+    color: var(--gold);
+    font-family: 'Playfair Display', serif;
+    font-size: 14px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    margin-top: 1px;
+    transition: background 0.2s;
+  }
+
+  .step.done .step-num {
+    background: var(--gold);
+    color: var(--dark);
+  }
+
+  .step-content {
+    flex: 1;
+  }
+
+  .step-title {
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+    color: var(--dark);
+    margin-bottom: 3px;
+    transition: color 0.2s;
+  }
+
+  .step.done .step-title {
+    color: var(--warm-gray);
+    text-decoration: line-through;
+  }
+
+  .step-desc {
+    font-size: 13px;
+    color: var(--warm-gray);
+    line-height: 1.6;
+    transition: opacity 0.2s;
+  }
+
+  .step.done .step-desc { opacity: 0.5; }
+
+  /* TIMER */
+  .timer-block {
+    background: var(--dark);
+    border-radius: 4px;
+    padding: 10px 16px;
+    margin-top: 8px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .timer-label {
+    font-size: 11px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--warm-gray);
+    flex: 1;
+  }
+
+  .timer-display {
+    font-family: 'Playfair Display', serif;
+    font-size: 20px;
+    color: var(--gold);
+    min-width: 52px;
+    text-align: right;
+  }
+
+  .timer-btn {
+    background: var(--gold);
+    border: none;
+    border-radius: 3px;
+    color: var(--dark);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 5px 10px;
+    cursor: pointer;
+    transition: opacity 0.2s;
+  }
+
+  .timer-btn:hover { opacity: 0.85; }
+
+  /* DIVIDER */
+  .divider {
+    height: 1px;
+    background: var(--border);
+    margin: 28px 0;
+  }
+
+  /* FOOTER TAG */
+  .footer-tag {
+    text-align: center;
+    margin-top: 20px;
+    font-size: 11px;
+    color: var(--warm-gray);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    font-family: 'DM Sans', sans-serif;
+  }
+
+  .footer-tag span {
+    color: var(--gold);
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- HEADER -->
+  <div class="header">
+    <div class="header-label">Recette du chef</div>
+    <h1>Poulet<br><em>Miel-Moutarde</em></h1>
+    <div class="header-sub">Avec riz — Prêt en 40 min</div>
+  </div>
+  <div class="gold-bar"></div>
+
+  <!-- PORTIONS -->
+  <div class="portions-block">
+    <div class="portions-label">Portions</div>
+    <div class="portions-controls">
+      <button class="btn-portion" onclick="changePortions(-1)">−</button>
+      <div class="portions-value" id="portions-display">2</div>
+      <div class="portions-unit">pers.</div>
+      <button class="btn-portion" onclick="changePortions(1)">+</button>
+    </div>
+  </div>
+
+  <!-- BODY -->
+  <div class="body">
+
+    <!-- INGRÉDIENTS -->
+    <div class="ingredients">
+      <div class="section-title">
+        <span class="section-num">01</span> Ingrédients
+      </div>
+
+      <div class="ingredient-row">
+        <div>
+          <div class="ing-name">Poulet</div>
+          <div class="ing-note">coupé en cubes de 2–3 cm</div>
+        </div>
+        <div class="ing-qty"><span class="qty" data-base="300" data-unit="g"></span></div>
+      </div>
+
+      <div class="ingredient-row">
+        <div>
+          <div class="ing-name">Farine</div>
+          <div class="ing-note">pour enrober</div>
+        </div>
+        <div class="ing-qty"><span class="qty" data-base="4" data-unit="c.à.s"></span></div>
+      </div>
+
+      <div class="ingredient-row">
+        <div>
+          <div class="ing-name">Eau</div>
+          <div class="ing-note">pour la sauce</div>
+        </div>
+        <div class="ing-qty"><span class="qty" data-base="300" data-unit="ml"></span></div>
+      </div>
+
+      <div class="ingredient-row">
+        <div>
+          <div class="ing-name">Moutarde de Dijon</div>
+        </div>
+        <div class="ing-qty"><span class="qty" data-base="2" data-unit="c.à.s"></span></div>
+      </div>
+
+      <div class="ingredient-row">
+        <div>
+          <div class="ing-name">Miel liquide</div>
+          <div class="ing-note">fleurs ou acacia</div>
+        </div>
+        <div class="ing-qty"><span class="qty" data-base="1" data-unit="c.à.s"></span></div>
+      </div>
+
+      <div class="ingredient-row">
+        <div>
+          <div class="ing-name">Riz</div>
+        </div>
+        <div class="ing-qty"><span class="qty" data-base="150" data-unit="g"></span></div>
+      </div>
+
+      <div class="ingredient-row">
+        <div>
+          <div class="ing-name">Huile, sel, poivre, épices</div>
+          <div class="ing-note">paprika, thym…</div>
+        </div>
+        <div class="ing-qty" style="color: var(--warm-gray); font-size:13px;">à goût</div>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- ÉTAPES -->
+    <div class="steps">
+      <div class="section-title">
+        <span class="section-num">02</span> Préparation
+      </div>
+
+      <div class="step" onclick="toggleStep(this)">
+        <div class="step-num">1</div>
+        <div class="step-content">
+          <div class="step-title">Préparer le poulet</div>
+          <div class="step-desc">Coupe le poulet en cubes réguliers de 2–3 cm. Dans un bol, mélange la farine avec sel et poivre. Roule chaque cube dedans — bien enrobé, sans excès.</div>
+        </div>
+      </div>
+
+      <div class="step" onclick="toggleStep(this)">
+        <div class="step-num">2</div>
+        <div class="step-content">
+          <div class="step-title">Dorer le poulet</div>
+          <div class="step-desc">Poêle bien chaude avec un filet d'huile. Dore les cubes sur toutes les faces jusqu'à belle couleur dorée.</div>
+          <div class="timer-block">
+            <div class="timer-label">⏱ Dorure</div>
+            <div class="timer-display" id="timer1-display">10:00</div>
+            <button class="timer-btn" onclick="event.stopPropagation(); toggleTimer('timer1', 600)">START</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="step" onclick="toggleStep(this)">
+        <div class="step-num">3</div>
+        <div class="step-content">
+          <div class="step-title">Cuire en sauce</div>
+          <div class="step-desc">Ajoute l'eau dans la poêle, assaisonne (sel, poivre, épices). Laisse mijoter à feu moyen.</div>
+          <div class="timer-block">
+            <div class="timer-label">⏱ Mijotage</div>
+            <div class="timer-display" id="timer2-display">20:00</div>
+            <button class="timer-btn" onclick="event.stopPropagation(); toggleTimer('timer2', 1200)">START</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="step" onclick="toggleStep(this)">
+        <div class="step-num">4</div>
+        <div class="step-content">
+          <div class="step-title">Finir la sauce miel-moutarde</div>
+          <div class="step-desc">Ajoute la moutarde et le miel. Mélange bien et laisse réduire 3–5 minutes à feu vif pour napper le poulet. La sauce doit être brillante et légèrement épaisse.</div>
+          <div class="timer-block">
+            <div class="timer-label">⏱ Réduction</div>
+            <div class="timer-display" id="timer3-display">05:00</div>
+            <button class="timer-btn" onclick="event.stopPropagation(); toggleTimer('timer3', 300)">START</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="step" onclick="toggleStep(this)">
+        <div class="step-num">5</div>
+        <div class="step-content">
+          <div class="step-title">Cuire le riz</div>
+          <div class="step-desc">Lance le riz en parallèle dès l'étape 3 — dans 2× son volume d'eau salée, à couvert, à feu doux. Il sera prêt en même temps que le poulet.</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="footer-tag">Recette mémorisée — <span>Cuisine du chef</span></div>
+</div>
+
+<script>
+  let portions = 2;
+  const BASE_PORTIONS = 2;
+
+  const timers = {};
+
+  function changePortions(delta) {
+    portions = Math.max(1, Math.min(12, portions + delta));
+    document.getElementById('portions-display').textContent = portions;
+    updateQuantities();
+  }
+
+  function updateQuantities() {
+    const ratio = portions / BASE_PORTIONS;
+    document.querySelectorAll('.qty').forEach(el => {
+      const base = parseFloat(el.dataset.base);
+      const unit = el.dataset.unit;
+      const val = base * ratio;
+      const isGram = unit === 'g' || unit === 'ml';
+      const rounded = isGram ? Math.round(val) : Math.round(val * 10) / 10;
+      el.textContent = rounded + ' ' + unit;
+    });
+  }
+
+  function toggleStep(el) {
+    el.classList.toggle('done');
+  }
+
+  function toggleTimer(id, totalSeconds) {
+    if (timers[id] && timers[id].interval) {
+      clearInterval(timers[id].interval);
+      timers[id].interval = null;
+      document.querySelector(`[onclick*="${id}"]`).textContent = 'START';
+      return;
+    }
+
+    if (!timers[id]) timers[id] = { remaining: totalSeconds };
+    else if (timers[id].remaining <= 0) timers[id].remaining = totalSeconds;
+
+    const btn = document.querySelector(`[onclick*="toggleTimer('${id}'"]`);
+    if (btn) btn.textContent = 'STOP';
+
+    timers[id].interval = setInterval(() => {
+      timers[id].remaining--;
+      if (timers[id].remaining <= 0) {
+        timers[id].remaining = 0;
+        clearInterval(timers[id].interval);
+        timers[id].interval = null;
+        document.getElementById(`${id}-display`).textContent = '✓ Prêt !';
+        const b = document.querySelector(`[onclick*="toggleTimer('${id}'"]`);
+        if (b) b.textContent = 'RESET';
+        return;
+      }
+      updateTimerDisplay(id);
+    }, 1000);
+  }
+
+  function updateTimerDisplay(id) {
+    const s = timers[id].remaining;
+    const m = Math.floor(s / 60);
+    const sec = s % 60;
+    document.getElementById(`${id}-display`).textContent =
+      String(m).padStart(2, '0') + ':' + String(sec).padStart(2, '0');
+  }
+
+  // Init quantities
+  updateQuantities();
+</script>
+</body>
+</html>
