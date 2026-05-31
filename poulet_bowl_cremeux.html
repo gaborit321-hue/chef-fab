@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Poulet Bowl Crémeux</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #1a1a18;
+    --card: #242420;
+    --accent: #d4a853;
+    --accent2: #e8c87a;
+    --text: #f0ead8;
+    --muted: #9a9488;
+    --border: #333330;
+    --green: #6b8f5e;
+    --red: #c0503a;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    min-height: 100vh;
+    padding: 2rem 1rem;
+  }
+
+  .container {
+    max-width: 560px;
+    margin: 0 auto;
+  }
+
+  header {
+    text-align: center;
+    margin-bottom: 2rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .tag {
+    display: inline-block;
+    font-size: 0.7rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--accent);
+    border: 1px solid var(--accent);
+    padding: 0.25rem 0.75rem;
+    border-radius: 20px;
+    margin-bottom: 0.75rem;
+  }
+
+  h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 2rem;
+    line-height: 1.2;
+    color: var(--text);
+    margin-bottom: 0.4rem;
+  }
+
+  h1 em {
+    color: var(--accent);
+    font-style: italic;
+  }
+
+  .subtitle {
+    font-size: 0.85rem;
+    color: var(--muted);
+    font-weight: 300;
+  }
+
+  /* Portion selector */
+  .portions-bar {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 1.25rem 1.5rem;
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+
+  .portions-label {
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--muted);
+  }
+
+  .portions-control {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .btn-portion {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    border: 1px solid var(--accent);
+    background: transparent;
+    color: var(--accent);
+    font-size: 1.2rem;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.2s;
+    line-height: 1;
+  }
+
+  .btn-portion:hover {
+    background: var(--accent);
+    color: var(--bg);
+  }
+
+  .portions-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.8rem;
+    color: var(--accent);
+    min-width: 2ch;
+    text-align: center;
+  }
+
+  /* Sections */
+  .section {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    overflow: hidden;
+    margin-bottom: 1rem;
+  }
+
+  .section-header {
+    padding: 0.9rem 1.5rem;
+    background: rgba(212,168,83,0.07);
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+  }
+
+  .section-icon { font-size: 1rem; }
+
+  .section-title {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--accent);
+    font-weight: 500;
+  }
+
+  /* Ingredient list */
+  .ingredient-list {
+    padding: 0.5rem 0;
+  }
+
+  .ingredient {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.65rem 1.5rem;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+    transition: background 0.15s;
+  }
+
+  .ingredient:last-child { border-bottom: none; }
+  .ingredient:hover { background: rgba(255,255,255,0.02); }
+
+  .ing-name {
+    font-size: 0.9rem;
+    color: var(--text);
+    font-weight: 300;
+  }
+
+  .ing-qty {
+    font-family: 'Playfair Display', serif;
+    font-size: 0.95rem;
+    color: var(--accent2);
+    font-weight: 700;
+    text-align: right;
+    min-width: 80px;
+  }
+
+  .ing-unit {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.75rem;
+    color: var(--muted);
+    font-weight: 400;
+    margin-left: 0.2rem;
+  }
+
+  /* Épices - pas de quantité fixe */
+  .spice-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    padding: 0.9rem 1.5rem;
+  }
+
+  .spice-tag {
+    background: rgba(212,168,83,0.1);
+    border: 1px solid rgba(212,168,83,0.25);
+    color: var(--accent2);
+    font-size: 0.78rem;
+    padding: 0.3rem 0.7rem;
+    border-radius: 20px;
+  }
+
+  /* Steps */
+  .steps-list {
+    padding: 0.75rem 0;
+  }
+
+  .step {
+    display: flex;
+    gap: 1rem;
+    padding: 0.8rem 1.5rem;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+    align-items: flex-start;
+  }
+
+  .step:last-child { border-bottom: none; }
+
+  .step-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.1rem;
+    color: var(--accent);
+    min-width: 1.5rem;
+    margin-top: 0.05rem;
+    font-style: italic;
+  }
+
+  .step-text {
+    font-size: 0.88rem;
+    color: var(--text);
+    font-weight: 300;
+    line-height: 1.6;
+  }
+
+  .step-text strong {
+    color: var(--accent2);
+    font-weight: 500;
+  }
+
+  footer {
+    text-align: center;
+    padding-top: 1.5rem;
+    font-size: 0.75rem;
+    color: var(--muted);
+    font-style: italic;
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <header>
+    <div class="tag">Recette maison</div>
+    <h1>Poulet Bowl <em>Crémeux</em></h1>
+    <p class="subtitle">Poêle · Citron vert · Mozzarella fondante</p>
+  </header>
+
+  <!-- Selector -->
+  <div class="portions-bar">
+    <span class="portions-label">Personnes</span>
+    <div class="portions-control">
+      <button class="btn-portion" onclick="change(-1)">−</button>
+      <span class="portions-num" id="nb">2</span>
+      <button class="btn-portion" onclick="change(1)">+</button>
+    </div>
+  </div>
+
+  <!-- Ingrédients principaux -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-icon">🥩</span>
+      <span class="section-title">Protéines &amp; légumes</span>
+    </div>
+    <div class="ingredient-list">
+      <div class="ingredient">
+        <span class="ing-name">Blanc de poulet</span>
+        <span class="ing-qty"><span data-base="150" data-unit="g"></span><span class="ing-unit">g</span></span>
+      </div>
+      <div class="ingredient">
+        <span class="ing-name">Poivron rouge</span>
+        <span class="ing-qty"><span data-base="0.5" data-unit="pièce" data-noscale="true"></span><span class="ing-unit" id="unit-pr"></span></span>
+      </div>
+      <div class="ingredient">
+        <span class="ing-name">Poivron vert</span>
+        <span class="ing-qty"><span data-base="0.5" data-unit="pièce" data-noscale="true"></span><span class="ing-unit" id="unit-pv"></span></span>
+      </div>
+      <div class="ingredient">
+        <span class="ing-name">Oignon</span>
+        <span class="ing-qty"><span data-base="0.5" data-unit="pièce" data-noscale="true"></span><span class="ing-unit" id="unit-oi"></span></span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Épices -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-icon">🌶️</span>
+      <span class="section-title">Épices &amp; aromates</span>
+    </div>
+    <div class="spice-row">
+      <span class="spice-tag">Ail</span>
+      <span class="spice-tag">Sel</span>
+      <span class="spice-tag">Poivre</span>
+      <span class="spice-tag">Chili</span>
+      <span class="spice-tag">Citron vert</span>
+    </div>
+  </div>
+
+  <!-- Riz & finition -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-icon">🍚</span>
+      <span class="section-title">Riz &amp; finition crémeuse</span>
+    </div>
+    <div class="ingredient-list">
+      <div class="ingredient">
+        <span class="ing-name">Riz (cru)</span>
+        <span class="ing-qty"><span data-base="80" data-unit="g"></span><span class="ing-unit">g</span></span>
+      </div>
+      <div class="ingredient">
+        <span class="ing-name">Yaourt grec</span>
+        <span class="ing-qty"><span data-base="130" data-unit="g"></span><span class="ing-unit">g</span></span>
+      </div>
+      <div class="ingredient">
+        <span class="ing-name">Mozzarella</span>
+        <span class="ing-qty"><span data-base="100" data-unit="g"></span><span class="ing-unit">g</span></span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Étapes -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-icon">👨‍🍳</span>
+      <span class="section-title">Préparation</span>
+    </div>
+    <div class="steps-list">
+      <div class="step">
+        <span class="step-num">1</span>
+        <span class="step-text">Coupe le poulet en <strong>lanières</strong>, les poivrons en lamelles et l'oignon en demi-rondelles.</span>
+      </div>
+      <div class="step">
+        <span class="step-num">2</span>
+        <span class="step-text">Lance la cuisson du <strong>riz</strong> en parallèle selon le temps indiqué sur le paquet.</span>
+      </div>
+      <div class="step">
+        <span class="step-num">3</span>
+        <span class="step-text">Dans une poêle bien chaude avec un filet d'huile, fais revenir le poulet avec l'oignon. Assaisonne avec <strong>ail, sel, poivre et chili</strong>.</span>
+      </div>
+      <div class="step">
+        <span class="step-num">4</span>
+        <span class="step-text">Ajoute les poivrons et le <strong>jus de citron vert</strong>. Cuis à feu moyen jusqu'à ce que les légumes soient fondants et le poulet bien cuit.</span>
+      </div>
+      <div class="step">
+        <span class="step-num">5</span>
+        <span class="step-text">Quand le riz est prêt, <strong>mélange tout</strong> dans la poêle ou dans un grand bol : riz + préparation poulet.</span>
+      </div>
+      <div class="step">
+        <span class="step-num">6</span>
+        <span class="step-text">Ajoute le <strong>yaourt grec</strong> et la <strong>mozzarella</strong> déchirée. Mélange délicatement et sers immédiatement.</span>
+      </div>
+    </div>
+  </div>
+
+  <footer>Recette pour <span id="footer-nb">2</span> personne(s) · Système métrique</footer>
+
+</div>
+
+<script>
+  let portions = 2;
+  const base = 2;
+
+  function change(delta) {
+    portions = Math.max(1, Math.min(20, portions + delta));
+    update();
+  }
+
+  function update() {
+    document.getElementById('nb').textContent = portions;
+    document.getElementById('footer-nb').textContent = portions;
+
+    const ratio = portions / base;
+
+    // Ingrédients g/ml
+    document.querySelectorAll('[data-base][data-unit="g"], [data-base][data-unit="ml"]').forEach(el => {
+      const base = parseFloat(el.dataset.base);
+      el.textContent = Math.round(base * ratio);
+    });
+
+    // Ingrédients pièces (fractions)
+    document.querySelectorAll('[data-base][data-noscale]').forEach(el => {
+      const b = parseFloat(el.dataset.base);
+      const raw = b * ratio;
+      el.textContent = formatFraction(raw);
+    });
+
+    // Unités pièces dynamiques
+    updatePieceUnits();
+  }
+
+  function formatFraction(n) {
+    if (n === Math.floor(n)) return n.toString();
+    const whole = Math.floor(n);
+    const dec = n - whole;
+    let frac = '';
+    if (Math.abs(dec - 0.5) < 0.01) frac = '½';
+    else if (Math.abs(dec - 0.25) < 0.01) frac = '¼';
+    else if (Math.abs(dec - 0.75) < 0.01) frac = '¾';
+    else frac = dec.toFixed(1).replace('0.', '.');
+    return whole > 0 ? `${whole} ${frac}` : frac;
+  }
+
+  function updatePieceUnits() {
+    // Les unités sont gérées dans les ing-qty, on affiche juste "pièce(s)" si entier
+    // Ici on met à jour les spans .ing-unit des poivrons/oignon
+    const pieceEls = document.querySelectorAll('[data-noscale]');
+    pieceEls.forEach(el => {
+      const b = parseFloat(el.dataset.base);
+      const raw = b * (portions / base);
+      const unitEl = el.parentElement.querySelector('.ing-unit');
+      if (unitEl) unitEl.textContent = raw <= 1 ? 'pièce' : 'pièces';
+    });
+  }
+
+  update();
+</script>
+</body>
+</html>
