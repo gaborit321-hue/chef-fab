@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Brownie au chocolat</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=EB+Garamond:ital@0;1&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --cream:#faf6ef;
+    --cream-2:#f2ead9;
+    --dark:#1c1712;
+    --dark-2:#2a221a;
+    --gold:#c8a24d;
+    --gold-light:#e2c98a;
+    --text:#2a221a;
+    --muted:#6b6357;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:var(--cream);
+    font-family:'DM Sans', sans-serif;
+    color:var(--text);
+    display:flex;
+    justify-content:center;
+    padding:0 0 40px 0;
+  }
+  .card{
+    max-width:480px;
+    width:100%;
+    background:var(--cream);
+    min-height:100vh;
+  }
+  header{
+    background:var(--dark);
+    color:var(--cream);
+    padding:28px 24px 22px 24px;
+    border-bottom:3px solid var(--gold);
+  }
+  header .eyebrow{
+    font-size:11px;
+    letter-spacing:3px;
+    text-transform:uppercase;
+    color:var(--gold-light);
+    margin-bottom:6px;
+  }
+  header h1{
+    font-family:'Playfair Display', serif;
+    font-weight:700;
+    font-size:28px;
+    margin:0 0 8px 0;
+    line-height:1.15;
+  }
+  header .subtitle{
+    font-family:'EB Garamond', serif;
+    font-style:italic;
+    color:var(--gold-light);
+    font-size:15px;
+  }
+  .meta-row{
+    display:flex;
+    gap:18px;
+    margin-top:14px;
+    flex-wrap:wrap;
+  }
+  .meta-item{
+    font-size:12px;
+    color:var(--cream-2);
+    display:flex;
+    align-items:center;
+    gap:6px;
+  }
+  .meta-item .dot{
+    width:5px;height:5px;border-radius:50%;
+    background:var(--gold);
+    display:inline-block;
+  }
+
+  section{
+    padding:22px 24px;
+  }
+  .section-title{
+    font-family:'Playfair Display', serif;
+    font-weight:700;
+    font-size:19px;
+    color:var(--dark);
+    border-bottom:2px solid var(--gold);
+    padding-bottom:8px;
+    margin:0 0 16px 0;
+  }
+
+  .servings-box{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    background:var(--cream-2);
+    border:1px solid var(--gold-light);
+    border-radius:10px;
+    padding:12px 16px;
+    margin-bottom:20px;
+  }
+  .servings-label{
+    font-size:13px;
+    color:var(--muted);
+    font-weight:500;
+  }
+  .servings-control{
+    display:flex;
+    align-items:center;
+    gap:14px;
+  }
+  .servings-control button{
+    width:32px;height:32px;
+    border-radius:50%;
+    border:1px solid var(--gold);
+    background:var(--dark);
+    color:var(--gold-light);
+    font-size:17px;
+    cursor:pointer;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    line-height:0;
+  }
+  .servings-control button:active{
+    background:var(--gold);
+    color:var(--dark);
+  }
+  .servings-value{
+    font-family:'Playfair Display', serif;
+    font-weight:700;
+    font-size:20px;
+    min-width:24px;
+    text-align:center;
+  }
+
+  ul.ingredients{
+    list-style:none;
+    margin:0;
+    padding:0;
+  }
+  ul.ingredients li{
+    display:flex;
+    justify-content:space-between;
+    align-items:baseline;
+    padding:10px 0;
+    border-bottom:1px dashed #ddd2b8;
+    font-size:15px;
+  }
+  ul.ingredients li:last-child{border-bottom:none;}
+  .ing-name{color:var(--text);}
+  .ing-amount{
+    font-weight:700;
+    color:var(--dark);
+    white-space:nowrap;
+    margin-left:12px;
+  }
+
+  ol.steps{
+    margin:0;
+    padding:0;
+    list-style:none;
+    counter-reset:step;
+  }
+  ol.steps li{
+    counter-increment:step;
+    position:relative;
+    padding:0 0 20px 42px;
+    font-size:15px;
+    line-height:1.5;
+  }
+  ol.steps li::before{
+    content:counter(step);
+    position:absolute;
+    left:0;
+    top:0;
+    width:28px;
+    height:28px;
+    background:var(--dark);
+    color:var(--gold-light);
+    border-radius:50%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-family:'Playfair Display', serif;
+    font-weight:700;
+    font-size:13px;
+  }
+  ol.steps li:last-child{padding-bottom:0;}
+  ol.steps li strong{color:var(--dark);}
+
+  .note-box{
+    background:var(--cream-2);
+    border-left:3px solid var(--gold);
+    padding:14px 16px;
+    border-radius:6px;
+    font-family:'EB Garamond', serif;
+    font-style:italic;
+    font-size:15px;
+    color:var(--dark-2);
+    margin-top:6px;
+  }
+
+  footer{
+    text-align:center;
+    padding:16px 24px 4px 24px;
+    font-size:11px;
+    color:var(--muted);
+    letter-spacing:1px;
+  }
+</style>
+</head>
+<body>
+<div class="card">
+
+  <header>
+    <div class="eyebrow">Desserts</div>
+    <h1>Brownie au chocolat</h1>
+    <div class="subtitle">Fondant au centre, moule verre 25×20cm</div>
+    <div class="meta-row">
+      <div class="meta-item"><span class="dot"></span>180°C</div>
+      <div class="meta-item"><span class="dot"></span>18–20 min</div>
+      <div class="meta-item"><span class="dot"></span><span id="servingsMetaText">6 personnes</span></div>
+    </div>
+  </header>
+
+  <section>
+    <div class="servings-box">
+      <span class="servings-label">Nombre de personnes</span>
+      <div class="servings-control">
+        <button id="decrBtn" aria-label="Diminuer">−</button>
+        <span class="servings-value" id="servingsValue">6</span>
+        <button id="incrBtn" aria-label="Augmenter">+</button>
+      </div>
+    </div>
+
+    <h2 class="section-title">Ingrédients</h2>
+    <ul class="ingredients" id="ingredientsList"></ul>
+  </section>
+
+  <section>
+    <h2 class="section-title">Étapes</h2>
+    <ol class="steps">
+      <li><strong>Préchauffe le four à 180°C.</strong> Beurre bien ton moule en verre ou tapisse-le de papier cuisson (le verre a tendance à coller).</li>
+      <li><strong>Fais fondre le chocolat et le beurre</strong> ensemble, au bain-marie ou 1–2 min au micro-ondes (par tranches de 30 sec, en mélangeant). Laisse tiédir légèrement.</li>
+      <li><strong>Fouette les œufs avec le sucre</strong> jusqu'à ce que le mélange blanchisse et double presque de volume.</li>
+      <li><strong>Incorpore le chocolat fondu</strong> au mélange œufs-sucre, doucement, à la maryse.</li>
+      <li><strong>Ajoute la farine et le sel</strong>, mélange juste assez pour homogénéiser — pas trop, sinon le brownie devient élastique.</li>
+      <li><strong>Ajoute les noix</strong> si tu en mets, puis verse dans ton moule 25×20cm.</li>
+      <li><strong>Cuisson : 180°C, 18–20 min.</strong> Le moule étant plus grand que le 20x20 standard, la pâte est plus fine → ça cuit plus vite. Le centre doit rester légèrement collant au couteau.</li>
+      <li>Laisse refroidir avant de couper — le brownie se raffermit en refroidissant.</li>
+    </ol>
+    <div class="note-box">Astuce de pro : teste avec un cure-dent 2–3 min avant la fin estimée. Miettes humides collées = parfait. Sec = trop cuit.</div>
+  </section>
+
+  <footer>Ma Cuisine — Bases &amp; Desserts</footer>
+</div>
+
+<script>
+(function(){
+  const BASE_SERVINGS = 6;
+  const MIN_SERVINGS = 2;
+  const MAX_SERVINGS = 16;
+
+  // scalable ingredients: amount/unit scale linearly with servings, rounded to integer for g
+  // non-scalable: stays fixed regardless of servings (e.g. pincée de sel)
+  const ingredients = [
+    { name: "Chocolat noir (min. 60%)", amount: 200, unit: "g", scalable: true },
+    { name: "Beurre", amount: 150, unit: "g", scalable: true },
+    { name: "Œufs", amount: 3, unit: "", scalable: true },
+    { name: "Sucre", amount: 150, unit: "g", scalable: true },
+    { name: "Farine", amount: 80, unit: "g", scalable: true },
+    { name: "Sel", amount: 1, unit: "pincée", scalable: false },
+    { name: "Noix ou noisettes concassées (optionnel)", amount: 50, unit: "g", scalable: true }
+  ];
+
+  let servings = BASE_SERVINGS;
+
+  const listEl = document.getElementById('ingredientsList');
+  const valueEl = document.getElementById('servingsValue');
+  const decrBtn = document.getElementById('decrBtn');
+  const incrBtn = document.getElementById('incrBtn');
+
+  function render(){
+    valueEl.textContent = servings;
+    const metaText = document.getElementById('servingsMetaText');
+    if(metaText){ metaText.textContent = servings + (servings > 1 ? ' personnes' : ' personne'); }
+    listEl.innerHTML = '';
+    ingredients.forEach(function(ing){
+      const li = document.createElement('li');
+
+      const nameSpan = document.createElement('span');
+      nameSpan.className = 'ing-name';
+      nameSpan.textContent = ing.name;
+
+      const amountSpan = document.createElement('span');
+      amountSpan.className = 'ing-amount';
+
+      if(!ing.scalable){
+        amountSpan.textContent = ing.amount + ' ' + ing.unit;
+      } else {
+        const scaled = Math.round(ing.amount * servings / BASE_SERVINGS);
+        amountSpan.textContent = scaled + (ing.unit ? (' ' + ing.unit) : '');
+      }
+
+      li.appendChild(nameSpan);
+      li.appendChild(amountSpan);
+      listEl.appendChild(li);
+    });
+  }
+
+  decrBtn.addEventListener('click', function(){
+    if(servings > MIN_SERVINGS){
+      servings -= 1;
+      render();
+    }
+  });
+
+  incrBtn.addEventListener('click', function(){
+    if(servings < MAX_SERVINGS){
+      servings += 1;
+      render();
+    }
+  });
+
+  render();
+})();
+</script>
+</body>
+</html>

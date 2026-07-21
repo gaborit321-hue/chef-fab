@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Muffins pépites de chocolat</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;900&family=EB+Garamond:ital@0;1&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --dark:#1c1712;
+    --dark2:#2a221a;
+    --gold:#c9a24b;
+    --gold-soft:#e4cd8f;
+    --cream:#f7f1e3;
+    --cream2:#efe6d0;
+    --ink:#2a221a;
+    --line:#ddd0ac;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:var(--cream);
+    color:var(--ink);
+    font-family:'EB Garamond', serif;
+    padding-bottom:40px;
+  }
+  header{
+    background:var(--dark);
+    color:var(--cream);
+    padding:28px 20px 24px;
+    text-align:center;
+    border-bottom:3px solid var(--gold);
+  }
+  header h1{
+    font-family:'Playfair Display', serif;
+    font-weight:900;
+    font-size:2rem;
+    margin:0 0 6px;
+    letter-spacing:0.5px;
+  }
+  header p{
+    margin:0;
+    font-family:'DM Sans', sans-serif;
+    color:var(--gold-soft);
+    font-size:0.85rem;
+    text-transform:uppercase;
+    letter-spacing:2px;
+  }
+  .wrap{
+    max-width:520px;
+    margin:0 auto;
+    padding:0 18px;
+  }
+  section{
+    margin-top:26px;
+  }
+  h2{
+    font-family:'Playfair Display', serif;
+    color:var(--dark);
+    font-size:1.3rem;
+    border-bottom:2px solid var(--gold);
+    padding-bottom:6px;
+    margin-bottom:14px;
+  }
+  /* Portion stepper */
+  .stepper{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:18px;
+    background:var(--dark);
+    border-radius:14px;
+    padding:16px;
+  }
+  .stepper button{
+    width:42px;
+    height:42px;
+    border-radius:50%;
+    border:2px solid var(--gold);
+    background:transparent;
+    color:var(--gold-soft);
+    font-size:1.4rem;
+    font-family:'DM Sans', sans-serif;
+    cursor:pointer;
+    line-height:1;
+  }
+  .stepper button:active{
+    background:var(--gold);
+    color:var(--dark);
+  }
+  .stepper .count{
+    color:var(--cream);
+    font-family:'Playfair Display', serif;
+    text-align:center;
+    min-width:110px;
+  }
+  .stepper .count .num{
+    font-size:2rem;
+    font-weight:700;
+    display:block;
+  }
+  .stepper .count .label{
+    font-family:'DM Sans', sans-serif;
+    font-size:0.75rem;
+    color:var(--gold-soft);
+    text-transform:uppercase;
+    letter-spacing:1px;
+  }
+  /* Ingredients */
+  ul.ingredients{
+    list-style:none;
+    margin:0;
+    padding:0;
+  }
+  ul.ingredients li{
+    display:flex;
+    justify-content:space-between;
+    padding:10px 4px;
+    border-bottom:1px dashed var(--line);
+    font-size:1.05rem;
+  }
+  ul.ingredients li .amt{
+    font-family:'DM Sans', sans-serif;
+    font-weight:700;
+    color:var(--dark);
+    white-space:nowrap;
+    margin-left:12px;
+  }
+  /* Mode toggle */
+  .mode-toggle{
+    display:flex;
+    background:var(--cream2);
+    border-radius:10px;
+    padding:4px;
+    gap:4px;
+  }
+  .mode-toggle button{
+    flex:1;
+    padding:10px;
+    border:none;
+    border-radius:8px;
+    background:transparent;
+    font-family:'DM Sans', sans-serif;
+    font-weight:700;
+    font-size:0.85rem;
+    text-transform:uppercase;
+    letter-spacing:1px;
+    color:var(--dark);
+    cursor:pointer;
+  }
+  .mode-toggle button.active{
+    background:var(--dark);
+    color:var(--gold-soft);
+  }
+  .mode-panel{
+    display:none;
+    background:var(--cream2);
+    border-radius:10px;
+    padding:14px 16px;
+    margin-top:12px;
+    font-family:'DM Sans', sans-serif;
+    font-size:0.9rem;
+  }
+  .mode-panel.active{display:block;}
+  .mode-panel .settings{
+    display:flex;
+    gap:18px;
+    margin-bottom:8px;
+  }
+  .mode-panel .settings div{
+    background:var(--dark);
+    color:var(--gold-soft);
+    padding:8px 14px;
+    border-radius:8px;
+    font-weight:700;
+  }
+  /* Steps */
+  ol.steps{
+    list-style:none;
+    margin:0;
+    padding:0;
+    counter-reset:step;
+  }
+  ol.steps li{
+    counter-increment:step;
+    display:flex;
+    gap:12px;
+    padding:12px 4px;
+    border-bottom:1px solid var(--line);
+    align-items:flex-start;
+  }
+  ol.steps li.done .step-text{
+    text-decoration:line-through;
+    color:#999;
+  }
+  ol.steps li .check{
+    flex-shrink:0;
+    width:28px;
+    height:28px;
+    border-radius:50%;
+    border:2px solid var(--gold);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-family:'DM Sans', sans-serif;
+    font-weight:700;
+    color:var(--dark);
+    cursor:pointer;
+    background:var(--cream);
+  }
+  ol.steps li.done .check{
+    background:var(--gold);
+    color:var(--dark);
+  }
+  ol.steps li .step-text{
+    font-size:1.05rem;
+    padding-top:2px;
+  }
+  .timer-row{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    margin-top:8px;
+  }
+  .timer-btn{
+    background:var(--dark);
+    color:var(--gold-soft);
+    border:none;
+    border-radius:8px;
+    padding:6px 12px;
+    font-family:'DM Sans', sans-serif;
+    font-size:0.8rem;
+    cursor:pointer;
+  }
+  .timer-display{
+    font-family:'Playfair Display', serif;
+    font-size:1.1rem;
+    color:var(--dark);
+    min-width:60px;
+  }
+  .note{
+    font-family:'DM Sans', sans-serif;
+    font-size:0.82rem;
+    color:#7a6f56;
+    margin-top:10px;
+    line-height:1.5;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <p>Ma Cuisine</p>
+  <h1>Muffins pépites de chocolat</h1>
+</header>
+
+<div class="wrap">
+
+  <section>
+    <div class="stepper">
+      <button id="minus">−</button>
+      <div class="count">
+        <span class="num" id="qty">9</span>
+        <span class="label">muffins</span>
+      </div>
+      <button id="plus">+</button>
+    </div>
+  </section>
+
+  <section>
+    <h2>Ingrédients</h2>
+    <ul class="ingredients" id="ingList"></ul>
+  </section>
+
+  <section>
+    <h2>Cuisson</h2>
+    <div class="mode-panel active" id="panel-four">
+      <div class="settings">
+        <div>180°C</div>
+        <div>18–20 min</div>
+      </div>
+      Four traditionnel, grille au milieu, chaleur tournante si possible.
+    </div>
+  </section>
+
+  <section>
+    <h2>Étapes</h2>
+    <ol class="steps" id="stepsList"></ol>
+  </section>
+
+  <p class="note">Astuce : ne mélange pas trop la pâte à l'étape 4 — quelques grumeaux, c'est normal. C'est ce qui donne des muffins moelleux plutôt que compacts.</p>
+
+</div>
+
+<script>
+  // Base recipe = 9 muffins
+  const BASE = 9;
+  let qty = 9;
+
+  // Ingredients: type 'g' | 'ml' | 'count' | 'spoon' | 'fixed'
+  const ingredients = [
+    { name: 'farine', base: 250, type: 'g' },
+    { name: 'sucre', base: 150, type: 'g' },
+    { name: 'levure chimique', base: 11, type: 'g' },
+    { name: 'sel fin', base: 1, type: 'fixed', unit: 'pincée' },
+    { name: 'œufs', base: 2, type: 'count' },
+    { name: 'lait', base: 100, type: 'ml' },
+    { name: 'beurre fondu', base: 80, type: 'g' },
+    { name: 'c.à.c. extrait de vanille', base: 1, type: 'spoon' },
+    { name: 'pépites de chocolat', base: 100, type: 'g' }
+  ];
+
+  const steps = [
+    "Préchauffe le four à 180°C.",
+    "Dans un grand bol : mélange farine, sucre, levure et sel. Fouette bien pour répartir la levure.",
+    "Dans un autre bol : fouette œufs, lait, beurre fondu (tiède, pas bouillant) et vanille.",
+    "Verse les liquides sur les secs. Mélange à la spatule, grossièrement — quelques grumeaux, c'est normal.",
+    "Incorpore les pépites de chocolat en 2-3 mouvements de spatule, pas plus (sinon elles fondent dans la pâte et la colorent).",
+    "Remplis les caissettes ou le moule aux 2/3 seulement. Garde quelques pépites de côté pour en déposer sur le dessus de chaque muffin.",
+    "Enfourne 18-20 min. Teste avec un couteau : il doit ressortir sec (à part le chocolat fondu).",
+    "Laisse tiédir 5 min dans le moule, puis démoule sur une grille."
+  ];
+
+  function roundSpoon(v){
+    // round to nearest 0.5
+    return Math.round(v * 2) / 2;
+  }
+
+  function formatSpoon(v){
+    if (v % 1 === 0) return v.toString();
+    return v.toString().replace('.', ',');
+  }
+
+  function renderIngredients(){
+    const list = document.getElementById('ingList');
+    list.innerHTML = '';
+    const ratio = qty / BASE;
+
+    ingredients.forEach(ing => {
+      let amtText = '';
+      let nameText = ing.name;
+
+      if (ing.type === 'g'){
+        amtText = Math.round(ing.base * ratio) + ' g';
+      } else if (ing.type === 'ml'){
+        amtText = Math.round(ing.base * ratio) + ' ml';
+      } else if (ing.type === 'count'){
+        amtText = Math.max(1, Math.round(ing.base * ratio)).toString();
+      } else if (ing.type === 'spoon'){
+        const val = roundSpoon(ing.base * ratio);
+        amtText = formatSpoon(val);
+      } else if (ing.type === 'fixed'){
+        amtText = ing.base + ' ' + ing.unit;
+      }
+
+      const li = document.createElement('li');
+      const span = document.createElement('span');
+      span.textContent = nameText;
+      const amt = document.createElement('span');
+      amt.className = 'amt';
+      amt.textContent = amtText;
+      li.appendChild(span);
+      li.appendChild(amt);
+      list.appendChild(li);
+    });
+  }
+
+  function renderSteps(){
+    const list = document.getElementById('stepsList');
+    list.innerHTML = '';
+    steps.forEach((text, i) => {
+      const li = document.createElement('li');
+      const check = document.createElement('div');
+      check.className = 'check';
+      check.textContent = '';
+      const stepText = document.createElement('div');
+      stepText.className = 'step-text';
+      stepText.textContent = text;
+
+      li.appendChild(check);
+      li.appendChild(stepText);
+
+      // Add timer for baking step
+      if (i === 6){
+        const timerWrap = document.createElement('div');
+        timerWrap.style.width = '100%';
+        const row = document.createElement('div');
+        row.className = 'timer-row';
+        const btn = document.createElement('button');
+        btn.className = 'timer-btn';
+        btn.textContent = 'Lancer le minuteur';
+        const display = document.createElement('span');
+        display.className = 'timer-display';
+        display.textContent = '';
+        row.appendChild(btn);
+        row.appendChild(display);
+        stepText.appendChild(row);
+
+        btn.addEventListener('click', () => startTimer(btn, display));
+      }
+
+      check.addEventListener('click', () => {
+        li.classList.toggle('done');
+      });
+
+      list.appendChild(li);
+    });
+  }
+
+  let activeTimer = null;
+
+  function startTimer(btn, display){
+    if (activeTimer){
+      clearInterval(activeTimer);
+      activeTimer = null;
+    }
+    let totalSeconds = 19 * 60; // four, milieu de la fourchette 18-20 min
+    btn.disabled = true;
+    btn.textContent = 'En cours…';
+
+    function render(){
+      const m = Math.floor(totalSeconds / 60);
+      const s = totalSeconds % 60;
+      display.textContent = m + ':' + (s < 10 ? '0' : '') + s;
+    }
+    render();
+
+    activeTimer = setInterval(() => {
+      totalSeconds--;
+      render();
+      if (totalSeconds <= 0){
+        clearInterval(activeTimer);
+        activeTimer = null;
+        display.textContent = 'Terminé !';
+        btn.disabled = false;
+        btn.textContent = 'Relancer';
+      }
+    }, 1000);
+  }
+
+  document.getElementById('minus').addEventListener('click', () => {
+    if (qty > 3){
+      qty--;
+      document.getElementById('qty').textContent = qty;
+      renderIngredients();
+    }
+  });
+
+  document.getElementById('plus').addEventListener('click', () => {
+    if (qty < 24){
+      qty++;
+      document.getElementById('qty').textContent = qty;
+      renderIngredients();
+    }
+  });
+
+  renderIngredients();
+  renderSteps();
+</script>
+
+</body>
+</html>
